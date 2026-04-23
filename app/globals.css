@@ -134,3 +134,28 @@
     scroll-behavior: smooth;
   }
 }
+
+/* ── Survey animations ──────────────────────────────────────────────────── */
+@keyframes surveySlideRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes surveySlideLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes popIn {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.12); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+@keyframes rankBadge {
+  0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg);   opacity: 1; }
+}
+
+.survey-slide-right { animation: surveySlideRight 0.28s cubic-bezier(0.2, 0, 0.2, 1) both; }
+.survey-slide-left  { animation: surveySlideLeft  0.28s cubic-bezier(0.2, 0, 0.2, 1) both; }
+.pop-in             { animation: popIn      0.22s ease-out both; }
+.rank-badge-in      { animation: rankBadge  0.26s ease-out both; }
