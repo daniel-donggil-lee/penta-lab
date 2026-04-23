@@ -25,7 +25,7 @@ export default function Hero() {
 
         {/* Sub */}
         <p className="mb-12 max-w-[600px] text-[clamp(16px,2.2vw,20px)] leading-[1.7] text-white/60">
-          오프라인 학원부터 팔로워 10만 온라인 강사까지 — 리마크 학원 3년 직접 운영으로 검증한 자동화 시스템을 이식합니다
+          오프라인 학원부터 팔로워 10만 온라인 강사까지 — 직접 운영하며 검증한 자동화 시스템을 이식합니다
         </p>
 
         {/* CTAs */}
@@ -47,7 +47,7 @@ export default function Hero() {
         {/* Badges */}
         <div className="flex flex-wrap gap-8">
           {[
-            { num: "3년", label: "리마크 직접 운영" },
+            { num: "3년", label: "직접 운영·검증" },
             { num: "15개", label: "검증된 솔루션" },
             { num: "1/10", label: "외주 대비 비용" },
             { num: "8주", label: "구축 완료" },

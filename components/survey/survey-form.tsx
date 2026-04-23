@@ -207,7 +207,7 @@ function Step2({
           <Field label="기관명 / 채널명 *">
             <Input value={org} onChange={(e) => onChange("org", e.target.value)} required
               className="mt-2 rounded-xl border-neutral-200 py-3.5 text-[15px] focus-visible:ring-[#C9A84C]"
-              placeholder="ex. 리마크학원, 슬기로운초등생활" />
+              placeholder="ex. 우리학원, 슬기로운초등생활" />
           </Field>
           <Field label="담당자 성함 *">
             <Input value={name} onChange={(e) => onChange("name", e.target.value)} required
