@@ -2,4 +2,4 @@
 2:I[39756,["/penta-lab/_next/static/chunks/01xlw8hd842-c.js","/penta-lab/_next/static/chunks/0d3shmwh5_nmn.js"],"default"]
 3:I[37457,["/penta-lab/_next/static/chunks/01xlw8hd842-c.js","/penta-lab/_next/static/chunks/0d3shmwh5_nmn.js"],"default"]
 4:[]
-0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"moC7H1k_wo8F8zNMdEeAj"}
+0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"1ktEQqujy2bmlpu5m7H-N"}
