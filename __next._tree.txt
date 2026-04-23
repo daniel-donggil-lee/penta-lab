@@ -1,2 +1,2 @@
-:HL["/penta-lab/_next/static/chunks/0la79-8ujn2~u.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"MGBwtPPr-duyLz-BA1lpF"}
+:HL["/penta-lab/_next/static/chunks/07fflmr~4w-pc.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"EvHut29P314pOZByq1pRP"}
