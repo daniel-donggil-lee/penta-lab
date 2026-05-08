@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
+  basePath: "/penta-lab",
+  assetPrefix: "/penta-lab",
+  images: { unoptimized: true },
 };
 
 export default nextConfig;

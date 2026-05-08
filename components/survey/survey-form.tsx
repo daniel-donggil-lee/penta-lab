@@ -42,39 +42,149 @@ const BIZ_TYPES = [
   },
 ];
 
-const TOOLS = [
-  "카카오채널", "구글시트", "전용 학원 앱", "엑셀·한글",
-  "네이버예약", "노션", "특별히 없음",
+type ToolCategory = { id: string; label: string; options: string[] };
+
+const TOOL_CATEGORIES_A: ToolCategory[] = [
+  { id: "parent_comm", label: "학부모·학생 소통", options: ["카카오채널", "카카오톡 단체방", "문자(SMS)", "네이버 밴드", "없음"] },
+  { id: "student_mgmt", label: "출결·학생 관리", options: ["전용 학원 앱(iM학원·학원365 등)", "구글시트", "엑셀", "수기 장부", "없음"] },
+  { id: "payment", label: "수납·결제", options: ["전용 학원 앱", "자동이체(CMS)", "카드 단말기", "계좌이체 수동", "없음"] },
+  { id: "internal_comm", label: "강사·스태프 내부 소통", options: ["카카오톡", "슬랙", "네이버웍스", "없음"] },
+  { id: "consult", label: "상담·등록", options: ["네이버 예약", "카카오 예약", "전화·수기", "구글 폼", "없음"] },
+  { id: "marketing", label: "마케팅·홍보", options: ["네이버 블로그", "인스타그램", "당근마켓", "유튜브", "없음"] },
+];
+
+const TOOL_CATEGORIES_B: ToolCategory[] = [
+  { id: "student_comm", label: "수강생 소통", options: ["카카오채널", "카카오 오픈채팅", "네이버카페", "디스코드", "없음"] },
+  { id: "live_class", label: "강의 진행", options: ["Zoom", "구글 밋", "유튜브 라이브", "없음(VOD만)"] },
+  { id: "content_create", label: "콘텐츠 제작·편집", options: ["프리미어 프로", "캡컷(CapCut)", "미리캔버스", "Canva", "없음(외주)"] },
+  { id: "content_sell", label: "강의 판매·배포", options: ["클래스101", "탈잉", "크몽", "자체 홈페이지/LMS", "없음"] },
+  { id: "payment_b", label: "결제·정산", options: ["토스페이먼츠", "아임포트(포트원)", "카카오페이", "계좌이체 수동", "없음"] },
+  { id: "marketing_b", label: "마케팅·퍼널", options: ["인스타그램", "유튜브", "메타광고", "스티비(뉴스레터)", "없음"] },
+];
+
+const TOOL_CATEGORIES_COMMON: ToolCategory[] = [
+  { id: "collaboration", label: "내부 협업·문서 관리", options: ["노션", "구글 워크스페이스", "슬랙", "엑셀·한글", "없음"] },
+  { id: "analytics", label: "데이터·성과 분석", options: ["구글 애널리틱스", "구글시트 수동 집계", "전용 대시보드", "없음"] },
 ];
 
 type Pain = { label: string; tooltip: string; solution: string };
+type PainCategory = { id: string; label: string; items: Pain[] };
 
-const PAINS_OFFLINE: Pain[] = [
-  { label: "상담 문의 늦게 답해 이탈", tooltip: "카카오 문의가 몰릴 때 답장이 늦어지면 그 사이에 다른 학원으로 이탈합니다", solution: "카카오 AI 챗봇 + 자동 응대" },
-  { label: "원비 미납 수작업 관리", tooltip: "매달 미납 확인·독촉 문자를 원장이 직접 보내는 상황", solution: "미납 자동 감지 + 알림톡 독촉" },
-  { label: "출결·보강 스케줄 관리", tooltip: "결석 처리, 보강 스케줄, 강사 공유까지 전부 수작업", solution: "출결·보강 관리 시스템" },
-  { label: "학부모 소통 (알림·리포트)", tooltip: "수업 알림, 숙제 공지, 진도 안내를 원장이 직접 보내는 상황", solution: "알림톡 자동화 + 주간 리포트" },
-  { label: "블로그·SNS 마케팅 못 함", tooltip: "알아도 시간이 없어서 못 하는 상태. 경쟁 학원에 계속 밀리는 중", solution: "블로그·인스타 자동 콘텐츠 생성" },
-  { label: "리뷰·평판 모니터링 없음", tooltip: "네이버 리뷰 하나가 상담 전환율을 바꿉니다. 모니터링 체계가 없는 상태", solution: "리뷰 모니터링 + 대응 시스템" },
-  { label: "강사 채용·이탈 문제", tooltip: "좋은 강사 찾기 어렵고, 구한 강사도 더 좋은 조건에 바로 이탈", solution: "강사 계약·정산 자동화" },
-  { label: "학생 성취도 추적 부재", tooltip: "데이터가 없어 '잘 하고 있어요'밖에 못 하는 상태. 학부모 신뢰 하락 원인", solution: "성취도 트래킹 대시보드" },
-  { label: "이탈 학생 미리 못 잡음", tooltip: "조용히 그만두는 학생을 사전에 감지하지 못함. 신규 모집보다 이탈 방어가 5배 저렴", solution: "이탈 예측 + 선제 케어 알림" },
-  { label: "등하원 안전 알림 미비", tooltip: "초등 학부모는 알림이 없으면 불안. 경쟁 학원 차별화 포인트", solution: "등하원 안전 알림 자동화" },
-  { label: "세무·회계 수작업", tooltip: "카드 매출 정리, 4대보험, 원천징수까지 전부 수작업", solution: "매출·지출 자동 분류" },
-  { label: "가맹·2호점 확장이 막힘", tooltip: "본점은 잘 되는데 커리큘럼 문서화·가맹 계약서·시스템이 없어서 확장이 안 되는 상태", solution: "프랜차이즈 준비 패키지" },
+const PAIN_CATEGORIES_A: PainCategory[] = [
+  {
+    id: "pa_comm",
+    label: "학부모·학생 소통",
+    items: [
+      { label: "상담 문의 늦게 답해 이탈", tooltip: "카카오 문의가 몰릴 때 답장이 늦어지면 그 사이에 다른 학원으로 이탈합니다", solution: "카카오 AI 챗봇 + 자동 응대" },
+      { label: "학부모 알림·리포트 수작업", tooltip: "수업 알림, 숙제 공지, 진도 안내를 원장이 직접 보내는 상황", solution: "알림톡 자동화 + 주간 리포트" },
+      { label: "상담 이력·DB 없음", tooltip: "상담 기록이 개인 메모나 카톡에만 남아 있어 인수인계·분석이 안 되는 상태", solution: "상담 CRM + 이력 관리 시스템" },
+    ],
+  },
+  {
+    id: "pa_student",
+    label: "출결·학생 관리",
+    items: [
+      { label: "출결·보강 스케줄 수작업", tooltip: "결석 처리, 보강 스케줄, 강사 공유까지 전부 수작업", solution: "출결·보강 관리 시스템" },
+      { label: "학생 성취도 추적 부재", tooltip: "데이터가 없어 '잘 하고 있어요'밖에 못 하는 상태. 학부모 신뢰 하락 원인", solution: "성취도 트래킹 대시보드" },
+      { label: "이탈 학생 미리 못 잡음", tooltip: "조용히 그만두는 학생을 사전에 감지하지 못함. 신규 모집보다 이탈 방어가 5배 저렴", solution: "이탈 예측 + 선제 케어 알림" },
+      { label: "등하원 안전 알림 미비", tooltip: "초등 학부모는 알림이 없으면 불안. 경쟁 학원 차별화 포인트", solution: "등하원 안전 알림 자동화" },
+    ],
+  },
+  {
+    id: "pa_payment",
+    label: "수납·결제",
+    items: [
+      { label: "원비 미납 수작업 관리", tooltip: "매달 미납 확인·독촉 문자를 원장이 직접 보내는 상황", solution: "미납 자동 감지 + 알림톡 독촉" },
+      { label: "세무·회계 수작업", tooltip: "카드 매출 정리, 4대보험, 원천징수까지 전부 수작업", solution: "매출·지출 자동 분류" },
+    ],
+  },
+  {
+    id: "pa_staff",
+    label: "강사·스태프 소통",
+    items: [
+      { label: "강사 채용·이탈 문제", tooltip: "좋은 강사 찾기 어렵고, 구한 강사도 더 좋은 조건에 바로 이탈", solution: "강사 계약·정산 자동화" },
+      { label: "강사 정산·계약 수작업", tooltip: "급여 정산, 계약서 갱신을 매달 수작업으로 처리하는 상태", solution: "강사 계약·정산 자동화" },
+    ],
+  },
+  {
+    id: "pa_consult",
+    label: "상담·등록",
+    items: [
+      { label: "신규 등록 프로세스 비효율", tooltip: "전화 상담 → 방문 → 서류 작성까지 원장이 전부 직접 처리하는 상태", solution: "자동 예약 + 등록 파이프라인" },
+      { label: "재등록률 관리 안 됨", tooltip: "만료 예정 학생에게 선제적으로 연락하는 체계가 없는 상태", solution: "재등록 알림 + 리텐션 자동화" },
+    ],
+  },
+  {
+    id: "pa_marketing",
+    label: "마케팅·홍보",
+    items: [
+      { label: "블로그·SNS 마케팅 못 함", tooltip: "알아도 시간이 없어서 못 하는 상태. 경쟁 학원에 계속 밀리는 중", solution: "블로그·인스타 자동 콘텐츠 생성" },
+      { label: "리뷰·평판 모니터링 없음", tooltip: "네이버 리뷰 하나가 상담 전환율을 바꿉니다. 모니터링 체계가 없는 상태", solution: "리뷰 모니터링 + 대응 시스템" },
+      { label: "가맹·2호점 확장이 막힘", tooltip: "본점은 잘 되는데 커리큘럼 문서화·가맹 계약서·시스템이 없어서 확장이 안 되는 상태", solution: "프랜차이즈 준비 패키지" },
+    ],
+  },
 ];
 
-const PAINS_ONLINE: Pain[] = [
-  { label: "수강생 CRM·관리가 없음", tooltip: "누가 몇 기 수강생인지, 언제 이탈했는지 추적이 안 되는 상태", solution: "수강생 CRM 파이프라인" },
-  { label: "결제·환불 수작업", tooltip: "계좌이체 확인, 환불 처리, 영수증 발급까지 전부 수작업", solution: "결제 자동화 + 환불 처리" },
-  { label: "콘텐츠 업로드 파이프라인 없음", tooltip: "영상을 올리고 링크를 나눠주는 게 전부인 상태. 진도·이력 관리가 안 됨", solution: "LMS + 콘텐츠 라이브러리" },
-  { label: "수강생 진도 추적 안 됨", tooltip: "누가 어디까지 들었는지, 미수강자 파악이 안 됨", solution: "진도 트래킹 대시보드" },
-  { label: "알림·공지 수동 발송", tooltip: "오픈 공지, 과제 안내, 리마인더를 매번 직접 보내는 상태", solution: "자동 알림 + 공지 시스템" },
-  { label: "이탈 수강생 감지 못 함", tooltip: "조용히 나가는 수강생을 사전에 잡지 못해 매 기수마다 재모집 비용 발생", solution: "이탈 예측 + 리텐션 자동화" },
-  { label: "수업 예약·스케줄 관리", tooltip: "DM·카톡으로 예약받고 엑셀에 정리하는 상황. 노쇼 관리도 안 됨", solution: "자동 예약 + 노쇼 알림" },
-  { label: "홍보 콘텐츠 자동화 안 됨", tooltip: "SNS 포스팅, 썸네일, 카피를 매번 수작업으로 만드는 상태", solution: "AI 콘텐츠 자동 생성 파이프라인" },
-  { label: "멤버십·구독 관리 어려움", tooltip: "구독 만료일, 갱신 알림, 등급 관리를 수작업으로 하는 상태", solution: "구독·멤버십 관리 시스템" },
-  { label: "수익·매출 데이터 시각화 없음", tooltip: "이번 달 얼마 벌었는지, 어느 강좌가 효자인지 데이터가 없는 상태", solution: "실시간 매출 대시보드" },
+const PAIN_CATEGORIES_B: PainCategory[] = [
+  {
+    id: "pb_comm",
+    label: "수강생 소통",
+    items: [
+      { label: "알림·공지 수동 발송", tooltip: "오픈 공지, 과제 안내, 리마인더를 매번 직접 보내는 상태", solution: "자동 알림 + 공지 시스템" },
+      { label: "수강생 문의 대응 수작업", tooltip: "DM, 카톡 문의를 원장이 직접 하나하나 답하는 상황. 밤낮없이 울리는 메시지", solution: "AI 챗봇 + 자동 응대" },
+    ],
+  },
+  {
+    id: "pb_class",
+    label: "강의 진행",
+    items: [
+      { label: "수업 예약·스케줄 관리", tooltip: "DM·카톡으로 예약받고 엑셀에 정리하는 상황. 노쇼 관리도 안 됨", solution: "자동 예약 + 노쇼 알림" },
+      { label: "수강생 진도 추적 안 됨", tooltip: "누가 어디까지 들었는지, 미수강자 파악이 안 됨", solution: "진도 트래킹 대시보드" },
+    ],
+  },
+  {
+    id: "pb_content",
+    label: "콘텐츠 제작·편집",
+    items: [
+      { label: "콘텐츠 업로드 파이프라인 없음", tooltip: "영상을 올리고 링크를 나눠주는 게 전부인 상태. 진도·이력 관리가 안 됨", solution: "LMS + 콘텐츠 라이브러리" },
+      { label: "홍보 콘텐츠 자동화 안 됨", tooltip: "SNS 포스팅, 썸네일, 카피를 매번 수작업으로 만드는 상태", solution: "AI 콘텐츠 자동 생성 파이프라인" },
+    ],
+  },
+  {
+    id: "pb_sell",
+    label: "강의 판매·배포",
+    items: [
+      { label: "수강생 CRM·관리가 없음", tooltip: "누가 몇 기 수강생인지, 언제 이탈했는지 추적이 안 되는 상태", solution: "수강생 CRM 파이프라인" },
+      { label: "이탈 수강생 감지 못 함", tooltip: "조용히 나가는 수강생을 사전에 잡지 못해 매 기수마다 재모집 비용 발생", solution: "이탈 예측 + 리텐션 자동화" },
+    ],
+  },
+  {
+    id: "pb_payment",
+    label: "결제·정산",
+    items: [
+      { label: "결제·환불 수작업", tooltip: "계좌이체 확인, 환불 처리, 영수증 발급까지 전부 수작업", solution: "결제 자동화 + 환불 처리" },
+      { label: "멤버십·구독 관리 어려움", tooltip: "구독 만료일, 갱신 알림, 등급 관리를 수작업으로 하는 상태", solution: "구독·멤버십 관리 시스템" },
+    ],
+  },
+  {
+    id: "pb_marketing",
+    label: "마케팅·퍼널",
+    items: [
+      { label: "유입→전환 퍼널 추적 안 됨", tooltip: "SNS에서 링크를 클릭하고 얼마나 결제로 이어지는지 데이터가 없는 상태", solution: "퍼널 분석 + 전환 최적화" },
+      { label: "SNS 광고 성과 추적 안 됨", tooltip: "메타·유튜브 광고를 돌리는데 어떤 광고가 효과 있는지 파악이 안 됨", solution: "광고 성과 대시보드" },
+    ],
+  },
+];
+
+const PAIN_CATEGORIES_COMMON: PainCategory[] = [
+  {
+    id: "pc_analytics",
+    label: "데이터·성과 분석",
+    items: [
+      { label: "수익·매출 데이터 시각화 없음", tooltip: "이번 달 얼마 벌었는지, 어느 강좌가 효자인지 데이터가 없는 상태", solution: "실시간 매출 대시보드" },
+      { label: "업무별 시간 소요 파악 안 됨", tooltip: "어떤 업무에 얼마나 시간을 쓰는지 모르니 자동화 우선순위를 잡기 어려운 상태", solution: "업무 효율 분석 리포트" },
+    ],
+  },
 ];
 
 // ── 예상 솔루션 계산 ────────────────────────────────────────────────────────
@@ -233,12 +343,18 @@ function Step2({
 }
 
 function Step3({
-  scale, staff, duration, tools: selectedTools, onSelect, onToggleTool,
+  bizType, scale, instructors, staff, duration, tools: selectedTools, onSelect, onNumber, onToggleTool,
 }: {
-  scale: string; staff: string; duration: string; tools: string[];
+  bizType: string; scale: string; instructors: string; staff: string; duration: string; tools: string[];
   onSelect: (k: string, v: string) => void;
+  onNumber: (k: string, v: string) => void;
   onToggleTool: (t: string) => void;
 }) {
+  const isCreator = bizType === "creator";
+  const scaleLabel =
+    bizType === "offline" || bizType === "franchise" ? "원생 수" :
+    bizType === "online" ? "수강생 수" : "구독자·수강생 수";
+
   return (
     <div>
       <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">Step 3 / {TOTAL_STEPS}</p>
@@ -247,18 +363,77 @@ function Step3({
       </h2>
       <p className="mb-10 text-[16px] text-neutral-500">대략적인 규모도 괜찮습니다.</p>
       <div className="flex flex-col gap-8">
-        <SelectGroup label="원생 / 수강생 수" value={scale} onChange={(v) => onSelect("scale", v)}
+        <SelectGroup label={scaleLabel} value={scale} onChange={(v) => onSelect("scale", v)}
           options={["~30명", "30~80명", "80~200명", "200명~", "아직 없음"]} />
-        <SelectGroup label="강사 / 스태프 수" value={staff} onChange={(v) => onSelect("staff", v)}
-          options={["1명 (원장 혼자)", "2~5명", "6~15명", "16명~"]} />
+
+        {/* 강사 수 — 크리에이터 제외 */}
+        {!isCreator && (
+          <div>
+            <p className="mb-1.5 text-[14px] font-bold text-neutral-700">강사 수</p>
+            <p className="mb-3 text-[12px] text-neutral-400">본인 외 강의를 수행하며 실질적인 매출을 일으키는 인원</p>
+            <div className="flex items-center gap-3">
+              <input
+                type="number"
+                min="0"
+                value={instructors}
+                onChange={(e) => onNumber("instructors", e.target.value)}
+                placeholder="0"
+                className="w-28 rounded-xl border border-neutral-200 px-4 py-3 text-[16px] font-bold text-center focus:outline-none focus:ring-2 focus:ring-[#C9A84C]"
+              />
+              <span className="text-[15px] text-neutral-500">명</span>
+              <span className="text-[13px] text-neutral-300">(본인만이면 0)</span>
+            </div>
+          </div>
+        )}
+
+        {/* 스태프 수 — 전 유형 */}
+        <div>
+          <p className="mb-1.5 text-[14px] font-bold text-neutral-700">스태프 수</p>
+          <p className="mb-3 text-[12px] text-neutral-400">매출 직결은 아니지만 운영을 보조하는 인원 (행정·상담·편집 등)</p>
+          <div className="flex items-center gap-3">
+            <input
+              type="number"
+              min="0"
+              value={staff}
+              onChange={(e) => onNumber("staff", e.target.value)}
+              placeholder="0"
+              className="w-28 rounded-xl border border-neutral-200 px-4 py-3 text-[16px] font-bold text-center focus:outline-none focus:ring-2 focus:ring-[#C9A84C]"
+            />
+            <span className="text-[15px] text-neutral-500">명</span>
+            <span className="text-[13px] text-neutral-300">(없으면 0)</span>
+          </div>
+        </div>
+
         <SelectGroup label="운영 기간" value={duration} onChange={(v) => onSelect("duration", v)}
           options={["준비 중", "1년 미만", "1~3년", "3년~"]} />
+        {/* 도구 카테고리 */}
         <div>
-          <p className="mb-3 text-[14px] font-bold text-neutral-700">현재 사용 중인 도구 <span className="font-normal text-neutral-400">(복수 선택)</span></p>
-          <div className="flex flex-wrap gap-2.5">
-            {TOOLS.map((t) => (
-              <SelectPill key={t} label={t} selected={selectedTools.includes(t)} onClick={() => onToggleTool(t)} />
-            ))}
+          <p className="mb-1 text-[14px] font-bold text-neutral-700">현재 사용 중인 도구</p>
+          <p className="mb-6 text-[13px] text-neutral-400">영역별로 해당하는 도구를 모두 선택해주세요.</p>
+          <div className="flex flex-col gap-5">
+            {[...(isCreator || bizType === "online" ? TOOL_CATEGORIES_B : TOOL_CATEGORIES_A), ...TOOL_CATEGORIES_COMMON].map((cat) => {
+              const selected = cat.options.filter((o) => selectedTools.includes(`${cat.id}::${o}`));
+              return (
+                <div key={cat.id} className="rounded-2xl border border-neutral-100 bg-neutral-50 p-5">
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className="text-[13px] font-bold text-neutral-700">{cat.label}</span>
+                    {selected.length > 0 && (
+                      <span className="rounded-full bg-[#C9A84C] px-2 py-0.5 text-[10px] font-black text-white">{selected.length}</span>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {cat.options.map((o) => (
+                      <SelectPill
+                        key={o}
+                        label={o}
+                        selected={selectedTools.includes(`${cat.id}::${o}`)}
+                        onClick={() => onToggleTool(`${cat.id}::${o}`)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -269,9 +444,10 @@ function Step3({
 function Step4({
   bizType, pains, onToggle,
 }: { bizType: string; pains: string[]; onToggle: (p: string) => void }) {
-  const list = bizType === "offline" || bizType === "franchise" ? PAINS_OFFLINE : PAINS_ONLINE;
+  const isB = bizType === "online" || bizType === "creator";
+  const trackCats = isB ? PAIN_CATEGORIES_B : PAIN_CATEGORIES_A;
+  const allCats = [...trackCats, ...PAIN_CATEGORIES_COMMON];
   const rankOf = (label: string) => pains.indexOf(label) + 1;
-  const RANK_COLORS = ["", "bg-[#C9A84C] text-white", "bg-neutral-700 text-white", "bg-neutral-400 text-white"];
 
   return (
     <div>
@@ -280,40 +456,52 @@ function Step4({
         지금 가장 아픈 문제는?
       </h2>
       <p className="mb-8 text-[16px] text-neutral-500">
-        우선순위 순서로 최대 3개를 골라주세요.
+        해당되는 문제를 모두 선택해주세요.
         {pains.length > 0 && (
-          <span className="ml-2 font-bold text-[#C9A84C]">({pains.length}/3 선택됨)</span>
+          <span className="ml-2 font-bold text-[#C9A84C]">({pains.length}개 선택됨)</span>
         )}
       </p>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {list.map((pain) => {
-          const rank = rankOf(pain.label);
-          const isSelected = rank > 0;
-          const isDisabled = !isSelected && pains.length >= 3;
-
+      <div className="flex flex-col gap-4">
+        {allCats.map((cat) => {
+          const selectedInCat = cat.items.filter((item) => pains.includes(item.label)).length;
           return (
-            <Tooltip key={pain.label} text={pain.tooltip}>
-              <button
-                type="button"
-                disabled={isDisabled}
-                onClick={() => onToggle(pain.label)}
-                className={`relative w-full rounded-2xl border-2 px-5 py-4 text-left text-[14px] font-semibold transition-all duration-150 disabled:opacity-25 ${
-                  isSelected
-                    ? "border-[#C9A84C] bg-[#C9A84C]/8 text-[#0a0a0a]"
-                    : "border-neutral-200 text-neutral-700 hover:border-neutral-300 hover:bg-neutral-50"
-                }`}
-              >
-                {isSelected && (
-                  <span className={`rank-badge-in absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-black ${RANK_COLORS[rank]}`}>
-                    {rank}
-                  </span>
+            <div key={cat.id} className="rounded-2xl border border-neutral-100 bg-neutral-50 p-5">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="text-[13px] font-bold text-neutral-700">{cat.label}</span>
+                {selectedInCat > 0 && (
+                  <span className="rounded-full bg-[#C9A84C] px-2 py-0.5 text-[10px] font-black text-white">{selectedInCat}</span>
                 )}
-                <span className={`mr-2 inline-block h-4 w-4 shrink-0 rounded border-2 align-middle transition-all ${isSelected ? "border-[#C9A84C] bg-[#C9A84C]" : "border-neutral-300"}`} />
-                {pain.label}
-                <span className="ml-1.5 text-[11px] text-neutral-400">ⓘ</span>
-              </button>
-            </Tooltip>
+              </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {cat.items.map((pain) => {
+                  const rank = rankOf(pain.label);
+                  const isSelected = rank > 0;
+                  return (
+                    <Tooltip key={pain.label} text={pain.tooltip}>
+                      <button
+                        type="button"
+                        onClick={() => onToggle(pain.label)}
+                        className={`relative w-full rounded-xl border-2 px-4 py-3 text-left text-[13px] font-semibold transition-all duration-150 ${
+                          isSelected
+                            ? "border-[#C9A84C] bg-[#C9A84C]/8 text-[#0a0a0a]"
+                            : "border-neutral-200 text-neutral-700 hover:border-neutral-300 hover:bg-white"
+                        }`}
+                      >
+                        {isSelected && (
+                          <span className={`rank-badge-in absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-black ${rank === 1 ? "bg-[#C9A84C] text-white" : rank === 2 ? "bg-neutral-700 text-white" : rank === 3 ? "bg-neutral-400 text-white" : "bg-neutral-200 text-neutral-600"}`}>
+                            {rank}
+                          </span>
+                        )}
+                        <span className={`mr-2 inline-block h-4 w-4 shrink-0 rounded border-2 align-middle transition-all ${isSelected ? "border-[#C9A84C] bg-[#C9A84C]" : "border-neutral-300"}`} />
+                        {pain.label}
+                        <span className="ml-1.5 text-[11px] text-neutral-400">ⓘ</span>
+                      </button>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </div>
@@ -324,8 +512,9 @@ function Step4({
 function SolutionPreview({ pains, bizType, scale }: { pains: string[]; bizType: string; scale: string }) {
   if (pains.length === 0) return null;
 
-  const allPains = bizType === "offline" || bizType === "franchise" ? PAINS_OFFLINE : PAINS_ONLINE;
-  const selectedPains = pains.map((label) => allPains.find((p) => p.label === label)).filter(Boolean) as Pain[];
+  const isB = bizType === "online" || bizType === "creator";
+  const allItems = [...(isB ? PAIN_CATEGORIES_B : PAIN_CATEGORIES_A), ...PAIN_CATEGORIES_COMMON].flatMap((c) => c.items);
+  const selectedPains = pains.map((label) => allItems.find((p) => p.label === label)).filter(Boolean) as Pain[];
   const tier = computeSolutionTier(scale, pains);
 
   return (
@@ -398,27 +587,14 @@ function Done({ onReset }: { onReset: () => void }) {
       <h2 className="mb-3 text-[clamp(26px,4vw,36px)] font-black tracking-[-0.03em]">
         제출 완료되었습니다
       </h2>
-      <p className="mb-8 text-[17px] leading-[1.7] text-neutral-500">
+      <p className="mb-6 text-[17px] leading-[1.7] text-neutral-500">
         24시간 내 담당자가 직접 연락드립니다.
       </p>
-
-      <div className="mb-10 flex flex-col items-center gap-3 sm:flex-row">
-        <a
-          href="https://pf.kakao.com/_mRqTG"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full bg-[#FEE500] px-6 py-3 text-[14px] font-bold text-[#3C1E1E] transition hover:opacity-90"
-        >
-          <span>💬</span> 카카오톡으로 빠른 상담
-        </a>
-        <a
-          href="https://www.instagram.com/penta.lab.official/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-3 text-[14px] font-bold text-neutral-700 transition hover:border-neutral-300"
-        >
-          <span>📸</span> 인스타 DM 보내기
-        </a>
+      <div className="mb-8 rounded-2xl border border-neutral-100 bg-neutral-50 px-6 py-5 text-left max-w-[440px]">
+        <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[#C9A84C]">다음 단계</p>
+        <p className="text-[14px] leading-[1.8] text-neutral-600">
+          1차 설문 내용을 바탕으로 더 자세한 <strong className="text-neutral-800">맞춤 2차 설문지</strong>를 제작하여 전달드릴 예정입니다. 2차 설문을 통해 정확한 니즈를 파악한 후 견적서를 제안드립니다.
+        </p>
       </div>
 
       <button
@@ -438,7 +614,7 @@ type FormState = {
   step: number;
   bizType: string;
   org: string; name: string; phone: string; email: string;
-  scale: string; staff: string; duration: string; tools: string[];
+  scale: string; instructors: string; staff: string; duration: string; tools: string[];
   pains: string[];
   buildBudget: string; maintBudget: string; startTiming: string; memo: string;
 };
@@ -447,7 +623,7 @@ const INITIAL: FormState = {
   step: 1,
   bizType: "",
   org: "", name: "", phone: "", email: "",
-  scale: "", staff: "", duration: "", tools: [],
+  scale: "", instructors: "", staff: "", duration: "", tools: [],
   pains: [],
   buildBudget: "", maintBudget: "", startTiming: "", memo: "",
 };
@@ -520,12 +696,10 @@ export default function SurveyForm() {
     })), []);
 
   const togglePain = useCallback((p: string) =>
-    setForm((prev) => {
-      const cur = prev.pains;
-      if (cur.includes(p)) return { ...prev, pains: cur.filter((x) => x !== p) };
-      if (cur.length >= 3) return prev;
-      return { ...prev, pains: [...cur, p] };
-    }), []);
+    setForm((prev) => ({
+      ...prev,
+      pains: prev.pains.includes(p) ? prev.pains.filter((x) => x !== p) : [...prev.pains, p],
+    })), []);
 
   const canNext = () => {
     if (form.step === 1) return !!form.bizType;
@@ -542,8 +716,23 @@ export default function SurveyForm() {
       action: "append", sheet: "설문_응답",
       values: [
         ts, bizLabel, form.org, form.name, form.phone, form.email,
-        form.scale, form.staff, form.duration, form.tools.join(", "),
-        form.pains.join(" / "),
+        form.scale, form.instructors ? `${form.instructors}명` : "0명", form.staff ? `${form.staff}명` : "0명", form.duration,
+        (() => {
+          const isB = form.bizType === "online" || form.bizType === "creator";
+          const cats = [...(isB ? TOOL_CATEGORIES_B : TOOL_CATEGORIES_A), ...TOOL_CATEGORIES_COMMON];
+          return cats.map((cat) => {
+            const picked = form.tools.filter((t) => t.startsWith(`${cat.id}::`)).map((t) => t.replace(`${cat.id}::`, ""));
+            return picked.length ? `[${cat.label}] ${picked.join(", ")}` : null;
+          }).filter(Boolean).join(" / ");
+        })(),
+        (() => {
+          const isB = form.bizType === "online" || form.bizType === "creator";
+          const cats = [...(isB ? PAIN_CATEGORIES_B : PAIN_CATEGORIES_A), ...PAIN_CATEGORIES_COMMON];
+          return cats.map((cat) => {
+            const picked = form.pains.filter((p) => cat.items.some((item) => item.label === p));
+            return picked.length ? `[${cat.label}] ${picked.join(", ")}` : null;
+          }).filter(Boolean).join(" / ");
+        })(),
         form.buildBudget, form.maintBudget, form.startTiming, form.memo,
       ],
     });
@@ -595,8 +784,13 @@ export default function SurveyForm() {
           <Step2 org={form.org} name={form.name} phone={form.phone} email={form.email} onChange={handleInfo} />
         )}
         {form.step === 3 && (
-          <Step3 scale={form.scale} staff={form.staff} duration={form.duration} tools={form.tools}
-            onSelect={handleScale} onToggleTool={toggleTool} />
+          <Step3
+            bizType={form.bizType}
+            scale={form.scale} instructors={form.instructors} staff={form.staff}
+            duration={form.duration} tools={form.tools}
+            onSelect={handleScale} onNumber={(k, v) => set(k as keyof FormState, v as never)}
+            onToggleTool={toggleTool}
+          />
         )}
         {form.step === 4 && (
           <Step4 bizType={form.bizType} pains={form.pains} onToggle={togglePain} />
