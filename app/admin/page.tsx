@@ -4,6 +4,8 @@ import { useState } from "react";
 const GAS_URL =
   "https://script.google.com/macros/s/AKfycbxN3NaaZpCPPZfH7gEJVOGnyzJp9kvH5KtTXBMh86gnp6OCxcFPN8dGaK7THmVQb9vJoQ/exec";
 
+// ── 데이터 정의 ──────────────────────────────────────────────────────────────
+
 const BIZ_TYPES = [
   { id: "offline", icon: "🏫", label: "오프라인 학원", desc: "대면 수업 중심의 학원 운영" },
   { id: "online", icon: "💻", label: "온라인 교육 사업자", desc: "Zoom·영상 강의 등 비대면 수업" },
@@ -36,10 +38,10 @@ const TOOL_CATEGORIES_COMMON: ToolCategory[] = [
   { id: "analytics", label: "데이터·성과 분석", options: ["구글 애널리틱스", "구글시트 수동 집계", "전용 대시보드", "없음"] },
 ];
 
-type AdminPain = { label: string; solution: string };
-type AdminPainCategory = { id: string; label: string; items: AdminPain[] };
+type PainItem = { label: string; solution: string };
+type PainCategory = { id: string; label: string; items: PainItem[] };
 
-const PAIN_CATEGORIES_A: AdminPainCategory[] = [
+const PAIN_CATEGORIES_A: PainCategory[] = [
   { id: "pa_comm", label: "학부모·학생 소통", items: [
     { label: "상담 문의 늦게 답해 이탈", solution: "카카오 AI 챗봇 + 자동 응대" },
     { label: "학부모 알림·리포트 수작업", solution: "알림톡 자동화 + 주간 리포트" },
@@ -70,7 +72,7 @@ const PAIN_CATEGORIES_A: AdminPainCategory[] = [
   ]},
 ];
 
-const PAIN_CATEGORIES_B: AdminPainCategory[] = [
+const PAIN_CATEGORIES_B: PainCategory[] = [
   { id: "pb_comm", label: "수강생 소통", items: [
     { label: "알림·공지 수동 발송", solution: "자동 알림 + 공지 시스템" },
     { label: "수강생 문의 대응 수작업", solution: "AI 챗봇 + 자동 응대" },
@@ -97,519 +99,324 @@ const PAIN_CATEGORIES_B: AdminPainCategory[] = [
   ]},
 ];
 
-const PAIN_CATEGORIES_COMMON: AdminPainCategory[] = [
+const PAIN_CATEGORIES_COMMON: PainCategory[] = [
   { id: "pc_analytics", label: "데이터·성과 분석", items: [
     { label: "수익·매출 데이터 시각화 없음", solution: "실시간 매출 대시보드" },
     { label: "업무별 시간 소요 파악 안 됨", solution: "업무 효율 분석 리포트" },
   ]},
 ];
 
-const SECTIONS = [
-  { id: "step1", label: "Step 1 · 기관 유형" },
-  { id: "step2", label: "Step 2 · 기본 정보" },
-  { id: "step3", label: "Step 3 · 규모 & 현황" },
-  { id: "step4a", label: "Step 4 · 페인포인트 (Track A — 오프라인)" },
-  { id: "step4b", label: "Step 4 · 페인포인트 (Track B — 온라인)" },
-  { id: "step5", label: "Step 5 · 예산 & 착수 시점" },
-  { id: "done", label: "완료 페이지" },
-];
+// ── 스타일 ──────────────────────────────────────────────────────────────────
 
-const pill = "inline-block rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-[12px] font-medium text-neutral-700";
-const badge = "inline-block rounded-full bg-neutral-100 px-2.5 py-0.5 text-[11px] font-bold text-neutral-500";
+const pillBase = "inline-flex cursor-pointer select-none items-center rounded-full border px-3.5 py-1.5 text-[12px] font-medium transition-all";
+const pillOff = `${pillBase} border-neutral-200 bg-white text-neutral-600 hover:border-neutral-400`;
+const pillOn = `${pillBase} border-[#C9A84C] bg-[#C9A84C]/10 text-[#0a0a0a] ring-1 ring-[#C9A84C]/30 font-bold`;
 
-// ── 구조 보기 ──────────────────────────────────────────────────────────────────
-
-function StructureView() {
-  return (
-    <div className="flex flex-col gap-6">
-      {/* Step 1 */}
-      <section className="rounded-2xl border border-neutral-200 bg-white p-7">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">1</span>
-          <h2 className="text-[17px] font-extrabold text-[#0a0a0a]">어떤 사업을 운영하고 계신가요?</h2>
-          <span className={badge}>단일 선택 · 자동 진행</span>
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {BIZ_TYPES.map((t) => (
-            <div key={t.id} className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-              <div className="mb-1 text-[20px]">{t.icon}</div>
-              <div className="text-[13px] font-bold text-[#0a0a0a]">{t.label}</div>
-              <div className="mt-1 text-[11px] text-neutral-400">{t.desc}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Step 2 */}
-      <section className="rounded-2xl border border-neutral-200 bg-white p-7">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">2</span>
-          <h2 className="text-[17px] font-extrabold text-[#0a0a0a]">기본 정보를 알려주세요</h2>
-          <span className={badge}>텍스트 입력</span>
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            { label: "기관명 / 채널명", required: true, placeholder: "ex. 우리학원" },
-            { label: "담당자 성함", required: true, placeholder: "홍길동" },
-            { label: "연락처", required: true, placeholder: "010-0000-0000" },
-            { label: "이메일", required: false, placeholder: "example@email.com" },
-          ].map((f) => (
-            <div key={f.label} className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-              <div className="text-[12px] font-bold text-neutral-500">
-                {f.label}
-                {f.required
-                  ? <span className="ml-1 text-red-400">*필수</span>
-                  : <span className="ml-1 text-neutral-300">선택</span>}
-              </div>
-              <div className="mt-1.5 text-[12px] text-neutral-400">{f.placeholder}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Step 3 */}
-      <section className="rounded-2xl border border-neutral-200 bg-white p-7">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">3</span>
-          <h2 className="text-[17px] font-extrabold text-[#0a0a0a]">현재 규모와 운영 현황</h2>
-          <span className={badge}>선택 + 숫자 입력 + 도구 선택</span>
-        </div>
-        <div className="flex flex-col gap-8">
-
-          {/* 규모 + 인원 */}
-          <div className="flex flex-col gap-5">
-            <div>
-              <div className="mb-1 text-[13px] font-bold text-neutral-600">수강생·원생 수</div>
-              <div className="mb-2 text-[11px] text-neutral-400">오프라인/프랜차이즈→원생 수 / 온라인→수강생 수 / 크리에이터→구독자·수강생 수</div>
-              <div className="flex flex-wrap gap-2">
-                {["~30명", "30~80명", "80~200명", "200명~", "아직 없음"].map((o) => <span key={o} className={pill}>{o}</span>)}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-              <div>
-                <div className="mb-1 text-[13px] font-bold text-neutral-600">강사 수 <span className="font-normal text-neutral-400 text-[11px]">본인 외 매출 발생 강사</span></div>
-                <div className="rounded-xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-2.5 text-[12px] text-neutral-400">숫자 직접 입력 (0명 가능)</div>
-              </div>
-              <div>
-                <div className="mb-1 text-[13px] font-bold text-neutral-600">스태프 수 <span className="font-normal text-neutral-400 text-[11px]">운영 보조 인원</span></div>
-                <div className="rounded-xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-2.5 text-[12px] text-neutral-400">숫자 직접 입력 (0명 가능)</div>
-              </div>
-              <div>
-                <div className="mb-1 text-[13px] font-bold text-neutral-600">운영 기간</div>
-                <div className="flex flex-wrap gap-1.5 mt-1">
-                  {["준비 중", "1년 미만", "1~3년", "3년~"].map((o) => <span key={o} className={pill}>{o}</span>)}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 도구 카테고리 — Track A */}
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-full bg-[#0a0a0a] px-2.5 py-0.5 text-[11px] font-bold text-white">Track A</span>
-              <span className="text-[12px] text-neutral-500">오프라인 학원 + 프랜차이즈</span>
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {TOOL_CATEGORIES_A.map((cat) => (
-                <div key={cat.id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-4">
-                  <div className="mb-2 text-[12px] font-bold text-neutral-700">{cat.label}</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {cat.options.map((o) => <span key={o} className={pill}>{o}</span>)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 도구 카테고리 — Track B */}
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-full bg-neutral-500 px-2.5 py-0.5 text-[11px] font-bold text-white">Track B</span>
-              <span className="text-[12px] text-neutral-500">온라인 교육 사업자 + 크리에이터</span>
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {TOOL_CATEGORIES_B.map((cat) => (
-                <div key={cat.id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-4">
-                  <div className="mb-2 text-[12px] font-bold text-neutral-700">{cat.label}</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {cat.options.map((o) => <span key={o} className={pill}>{o}</span>)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 도구 카테고리 — 공통 */}
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-full border border-[#C9A84C] px-2.5 py-0.5 text-[11px] font-bold text-[#C9A84C]">공통</span>
-              <span className="text-[12px] text-neutral-500">Track A + B 모두 표시</span>
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {TOOL_CATEGORIES_COMMON.map((cat) => (
-                <div key={cat.id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-4">
-                  <div className="mb-2 text-[12px] font-bold text-neutral-700">{cat.label}</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {cat.options.map((o) => <span key={o} className={pill}>{o}</span>)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Step 4 */}
-      <section className="rounded-2xl border border-neutral-200 bg-white p-7">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">4</span>
-          <h2 className="text-[17px] font-extrabold text-[#0a0a0a]">지금 가장 아픈 문제는?</h2>
-          <span className={badge}>해당 항목 모두 선택 가능</span>
-        </div>
-        <div className="flex flex-col gap-8">
-
-          {/* Track A */}
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-full bg-[#0a0a0a] px-2.5 py-0.5 text-[11px] font-bold text-white">Track A</span>
-              <span className="text-[12px] text-neutral-500">오프라인 학원 + 프랜차이즈</span>
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {PAIN_CATEGORIES_A.map((cat) => (
-                <div key={cat.id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-4">
-                  <div className="mb-2 text-[12px] font-bold text-neutral-700">{cat.label}</div>
-                  <div className="flex flex-col gap-1.5">
-                    {cat.items.map((p) => (
-                      <div key={p.label}>
-                        <div className="text-[12px] font-semibold text-[#0a0a0a]">{p.label}</div>
-                        <div className="text-[11px] text-[#C9A84C]">→ {p.solution}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Track B */}
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-full bg-neutral-500 px-2.5 py-0.5 text-[11px] font-bold text-white">Track B</span>
-              <span className="text-[12px] text-neutral-500">온라인 교육 사업자 + 크리에이터</span>
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {PAIN_CATEGORIES_B.map((cat) => (
-                <div key={cat.id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-4">
-                  <div className="mb-2 text-[12px] font-bold text-neutral-700">{cat.label}</div>
-                  <div className="flex flex-col gap-1.5">
-                    {cat.items.map((p) => (
-                      <div key={p.label}>
-                        <div className="text-[12px] font-semibold text-[#0a0a0a]">{p.label}</div>
-                        <div className="text-[11px] text-[#C9A84C]">→ {p.solution}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 공통 */}
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-full border border-[#C9A84C] px-2.5 py-0.5 text-[11px] font-bold text-[#C9A84C]">공통</span>
-              <span className="text-[12px] text-neutral-500">Track A + B 모두 표시</span>
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {PAIN_CATEGORIES_COMMON.map((cat) => (
-                <div key={cat.id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-4">
-                  <div className="mb-2 text-[12px] font-bold text-neutral-700">{cat.label}</div>
-                  <div className="flex flex-col gap-1.5">
-                    {cat.items.map((p) => (
-                      <div key={p.label}>
-                        <div className="text-[12px] font-semibold text-[#0a0a0a]">{p.label}</div>
-                        <div className="text-[11px] text-[#C9A84C]">→ {p.solution}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Step 5 */}
-      <section className="rounded-2xl border border-neutral-200 bg-white p-7">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">5</span>
-          <h2 className="text-[17px] font-extrabold text-[#0a0a0a]">예산과 시작 시점</h2>
-          <span className={badge}>단일 선택</span>
-        </div>
-        <div className="flex flex-col gap-5">
-          {[
-            { label: "초기 제작비 예산", options: ["~500만원", "500만~1,500만원", "1,500만~3,000만원", "3,000만원~", "아직 모름"] },
-            { label: "월 유지보수 예산", options: ["~30만원/월", "30~80만원/월", "80~200만원/월", "협의 필요"] },
-            { label: "원하는 착수 시점", options: ["가능한 빨리", "1개월 내", "3개월 내", "아직 탐색 중"] },
-          ].map((row) => (
-            <div key={row.label}>
-              <div className="mb-2 text-[13px] font-bold text-neutral-600">{row.label}</div>
-              <div className="flex flex-wrap gap-2">
-                {row.options.map((o) => <span key={o} className={pill}>{o}</span>)}
-              </div>
-            </div>
-          ))}
-          <div>
-            <div className="mb-2 text-[13px] font-bold text-neutral-600">추가 요청사항 <span className="font-normal text-neutral-400">자유 기술, 선택</span></div>
-            <div className="rounded-xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-3 text-[12px] text-neutral-400">
-              현재 쓰는 시스템, 원하는 기능, 레퍼런스 사이트 등 자유롭게
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <div className="rounded-2xl border border-[#C9A84C]/20 bg-[#C9A84C]/5 p-6">
-        <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">수집 정보 요약</p>
-        <div className="flex flex-wrap gap-x-8 gap-y-1 text-[13px] text-neutral-600">
-          <span>시트: <strong className="text-neutral-800">설문_응답</strong></span>
-          <span>총 필드: <strong className="text-neutral-800">15개</strong></span>
-          <span>Track A 선택지: <strong className="text-neutral-800">12개</strong></span>
-          <span>Track B 선택지: <strong className="text-neutral-800">10개</strong></span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── 수정 요청 ──────────────────────────────────────────────────────────────────
-
-type RequestItem = { section: string; type: string; content: string; memo: string };
-
-function EditRequestView() {
-  const [requests, setRequests] = useState<RequestItem[]>([
-    { section: "", type: "", content: "", memo: "" },
-  ]);
-  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
-
-  const update = (i: number, key: keyof RequestItem, val: string) => {
-    setRequests((prev) => prev.map((r, idx) => idx === i ? { ...r, [key]: val } : r));
-  };
-
-  const addRow = () => setRequests((p) => [...p, { section: "", type: "", content: "", memo: "" }]);
-  const removeRow = (i: number) => setRequests((p) => p.filter((_, idx) => idx !== i));
-
-  const submit = async () => {
-    const valid = requests.filter((r) => r.section && r.type && r.content);
-    if (valid.length === 0) return;
-    setStatus("sending");
-    try {
-      await fetch(GAS_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sheet: "수정요청",
-          rows: valid.map((r) => ({
-            타임스탬프: new Date().toLocaleString("ko-KR"),
-            섹션: r.section,
-            수정유형: r.type,
-            수정내용: r.content,
-            추가메모: r.memo,
-          })),
-        }),
-      });
-      setStatus("done");
-      setRequests([{ section: "", type: "", content: "", memo: "" }]);
-    } catch {
-      setStatus("error");
-    }
-  };
-
-  const TYPE_OPTIONS = ["항목 추가", "항목 삭제", "텍스트 수정", "순서 변경", "선택지 변경", "기타"];
-
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="rounded-2xl border border-neutral-200 bg-white p-7">
-        <p className="mb-1 text-[13px] font-bold text-neutral-700">수정 요청 작성</p>
-        <p className="mb-7 text-[13px] text-neutral-400">
-          섹션별로 수정할 내용을 작성하고 제출하면 Google Sheets <strong className="text-neutral-600">수정요청</strong> 탭에 기록됩니다.
-        </p>
-
-        <div className="flex flex-col gap-4">
-          {requests.map((r, i) => (
-            <div key={i} className="relative rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
-              {requests.length > 1 && (
-                <button
-                  onClick={() => removeRow(i)}
-                  className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full bg-neutral-200 text-[12px] text-neutral-500 hover:bg-red-100 hover:text-red-500 transition"
-                >
-                  ✕
-                </button>
-              )}
-
-              <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {/* 섹션 */}
-                <div>
-                  <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">섹션 *</label>
-                  <select
-                    value={r.section}
-                    onChange={(e) => update(i, "section", e.target.value)}
-                    className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2.5 text-[13px] text-neutral-700 focus:outline-none focus:ring-2 focus:ring-[#C9A84C]"
-                  >
-                    <option value="">선택하세요</option>
-                    {SECTIONS.map((s) => (
-                      <option key={s.id} value={s.label}>{s.label}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* 수정 유형 */}
-                <div>
-                  <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">수정 유형 *</label>
-                  <select
-                    value={r.type}
-                    onChange={(e) => update(i, "type", e.target.value)}
-                    className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2.5 text-[13px] text-neutral-700 focus:outline-none focus:ring-2 focus:ring-[#C9A84C]"
-                  >
-                    <option value="">선택하세요</option>
-                    {TYPE_OPTIONS.map((t) => (
-                      <option key={t} value={t}>{t}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* 수정 내용 */}
-              <div className="mb-3">
-                <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">수정 내용 *</label>
-                <textarea
-                  value={r.content}
-                  onChange={(e) => update(i, "content", e.target.value)}
-                  placeholder={
-                    r.type === "항목 추가" ? "ex. '계절학기 운영' 항목 추가해주세요" :
-                    r.type === "항목 삭제" ? "ex. '등하원 안전 알림 미비' 항목 삭제해주세요" :
-                    r.type === "텍스트 수정" ? "ex. '원비 미납 수작업 관리' → '원비 미납 처리 자동화'" :
-                    "수정할 내용을 구체적으로 적어주세요"
-                  }
-                  rows={3}
-                  className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2.5 text-[13px] text-neutral-700 placeholder:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-[#C9A84C] resize-none"
-                />
-              </div>
-
-              {/* 추가 메모 */}
-              <div>
-                <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">추가 메모 <span className="font-normal text-neutral-300">선택</span></label>
-                <input
-                  type="text"
-                  value={r.memo}
-                  onChange={(e) => update(i, "memo", e.target.value)}
-                  placeholder="이유, 참고 사항 등"
-                  className="w-full rounded-xl border border-neutral-200 bg-white px-3 py-2.5 text-[13px] text-neutral-700 placeholder:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-[#C9A84C]"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* 항목 추가 */}
-        <button
-          onClick={addRow}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-neutral-300 py-3 text-[13px] font-semibold text-neutral-400 hover:border-[#C9A84C] hover:text-[#C9A84C] transition"
-        >
-          + 수정 항목 추가
-        </button>
-      </div>
-
-      {/* 제출 */}
-      <div className="flex items-center gap-4">
-        <button
-          onClick={submit}
-          disabled={status === "sending" || status === "done"}
-          className="rounded-full bg-[#0a0a0a] px-8 py-3.5 text-[14px] font-bold text-white transition hover:bg-neutral-800 disabled:opacity-40"
-        >
-          {status === "sending" ? "전송 중..." : status === "done" ? "전송 완료 ✓" : "수정 요청 제출"}
-        </button>
-        {status === "done" && (
-          <div className="flex items-center gap-2">
-            <span className="text-[13px] text-neutral-500">Sheets <strong>수정요청</strong> 탭에 기록되었습니다.</span>
-            <button
-              onClick={() => setStatus("idle")}
-              className="text-[12px] text-[#C9A84C] underline underline-offset-2"
-            >
-              새 요청 작성
-            </button>
-          </div>
-        )}
-        {status === "error" && (
-          <span className="text-[13px] text-red-500">전송 실패 — 다시 시도해주세요</span>
-        )}
-      </div>
-
-      {/* 시트 바로가기 */}
-      <div className="rounded-2xl border border-neutral-100 bg-neutral-50 p-5">
-        <p className="mb-1 text-[12px] font-bold text-neutral-500">제출된 수정 요청 확인</p>
-        <a
-          href="https://docs.google.com/spreadsheets/d/1pdW8Xif8ZA75UbkAAbnn02wosNbO5kNnmuJ462E-nqw/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[13px] font-semibold text-[#C9A84C] underline underline-offset-2 hover:text-[#b8923f] transition"
-        >
-          Google Sheets → 수정요청 탭 열기 →
-        </a>
-      </div>
-    </div>
-  );
-}
+const inputClass = "w-full rounded-xl border border-neutral-200 bg-white px-4 py-3 text-[14px] text-neutral-800 placeholder:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-[#C9A84C] transition";
 
 // ── 메인 ──────────────────────────────────────────────────────────────────────
 
-export default function AdminPage() {
-  const [tab, setTab] = useState<"structure" | "edit">("structure");
+export default function SurveyPage() {
+  const [bizType, setBizType] = useState("");
+  const [org, setOrg] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [scale, setScale] = useState("");
+  const [instructors, setInstructors] = useState("");
+  const [staff, setStaff] = useState("");
+  const [duration, setDuration] = useState("");
+  const [tools, setTools] = useState<string[]>([]);
+  const [pains, setPains] = useState<string[]>([]);
+  const [buildBudget, setBuildBudget] = useState("");
+  const [maintBudget, setMaintBudget] = useState("");
+  const [startTiming, setStartTiming] = useState("");
+  const [memo, setMemo] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
+
+  const isB = bizType === "online" || bizType === "creator";
+  const toolCats = [...(isB ? TOOL_CATEGORIES_B : TOOL_CATEGORIES_A), ...TOOL_CATEGORIES_COMMON];
+  const painCats = [...(isB ? PAIN_CATEGORIES_B : PAIN_CATEGORIES_A), ...PAIN_CATEGORIES_COMMON];
+
+  const toggleTool = (catId: string, opt: string) => {
+    const key = `${catId}::${opt}`;
+    setTools((prev) => prev.includes(key) ? prev.filter((t) => t !== key) : [...prev, key]);
+  };
+
+  const togglePain = (label: string) => {
+    setPains((prev) => prev.includes(label) ? prev.filter((p) => p !== label) : [...prev, label]);
+  };
+
+  const canSubmit = bizType && org && name && phone && pains.length > 0;
+
+  async function handleSubmit() {
+    if (!canSubmit) return;
+    setStatus("sending");
+    const ts = new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+    const bizLabel = BIZ_TYPES.find((t) => t.id === bizType)?.label ?? bizType;
+    const toolsStr = toolCats.map((cat) => {
+      const picked = tools.filter((t) => t.startsWith(`${cat.id}::`)).map((t) => t.replace(`${cat.id}::`, ""));
+      return picked.length ? `[${cat.label}] ${picked.join(", ")}` : null;
+    }).filter(Boolean).join(" / ");
+    const painsStr = painCats.map((cat) => {
+      const picked = pains.filter((p) => cat.items.some((item) => item.label === p));
+      return picked.length ? `[${cat.label}] ${picked.join(", ")}` : null;
+    }).filter(Boolean).join(" / ");
+
+    const payload = JSON.stringify({
+      action: "append", sheet: "설문_응답",
+      values: [
+        ts, bizLabel, org, name, phone, email,
+        scale, instructors ? `${instructors}명` : "0명", staff ? `${staff}명` : "0명", duration,
+        toolsStr, painsStr, buildBudget, maintBudget, startTiming, memo,
+      ],
+    });
+    try {
+      await fetch(`${GAS_URL}?payload=${encodeURIComponent(payload)}`, { method: "GET", mode: "no-cors" });
+      setStatus("done");
+    } catch {
+      alert("전송 중 오류가 발생했습니다.");
+      setStatus("idle");
+    }
+  }
+
+  if (status === "done") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f8f8f6] px-6">
+        <div className="max-w-md text-center">
+          <div className="mb-4 text-5xl">✅</div>
+          <h1 className="mb-2 text-[24px] font-black text-[#0a0a0a]">제출 완료</h1>
+          <p className="mb-8 text-[14px] text-neutral-500">
+            응답이 정상적으로 기록되었습니다.<br />빠른 시일 내에 연락드리겠습니다.
+          </p>
+          <button onClick={() => { setStatus("idle"); setBizType(""); setOrg(""); setName(""); setPhone(""); setEmail(""); setScale(""); setInstructors(""); setStaff(""); setDuration(""); setTools([]); setPains([]); setBuildBudget(""); setMaintBudget(""); setStartTiming(""); setMemo(""); }}
+            className="rounded-full bg-[#0a0a0a] px-8 py-3 text-[14px] font-bold text-white hover:bg-neutral-800 transition">
+            새 응답 작성
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#f8f8f6] px-6 py-12">
-      <div className="mx-auto max-w-[960px]">
+    <div className="min-h-screen bg-[#f8f8f6] px-4 py-10 sm:px-6">
+      <div className="mx-auto max-w-[720px]">
 
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">PENTALAB ADMIN</p>
-            <h1 className="mt-1 text-[28px] font-black tracking-[-0.03em] text-[#0a0a0a]">설문 관리자 페이지</h1>
-          </div>
-          <a
-            href="https://docs.google.com/spreadsheets/d/1pdW8Xif8ZA75UbkAAbnn02wosNbO5kNnmuJ462E-nqw/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-[#0a0a0a] px-5 py-2.5 text-[13px] font-bold text-white hover:bg-neutral-800 transition"
-          >
-            답변 시트 열기 →
-          </a>
+        <div className="mb-10 text-center">
+          <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">PENTA LAB</p>
+          <h1 className="text-[26px] font-black tracking-[-0.03em] text-[#0a0a0a] sm:text-[32px]">교육 사업 진단 설문</h1>
+          <p className="mt-2 text-[14px] text-neutral-400">3분이면 충분합니다. 현재 운영 현황을 알려주세요.</p>
         </div>
 
-        {/* Tabs */}
-        <div className="mb-8 flex gap-1 rounded-2xl border border-neutral-200 bg-white p-1.5 w-fit">
-          {[
-            { key: "structure", label: "구조 보기" },
-            { key: "edit", label: "수정 요청" },
-          ].map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key as "structure" | "edit")}
-              className={`rounded-xl px-6 py-2.5 text-[14px] font-semibold transition ${
-                tab === t.key
-                  ? "bg-[#0a0a0a] text-white"
-                  : "text-neutral-500 hover:text-neutral-700"
-              }`}
-            >
-              {t.label}
+        <div className="flex flex-col gap-8">
+
+          {/* ─── 1. 사업 유형 ─── */}
+          <section className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
+            <div className="mb-5 flex items-center gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">1</span>
+              <h2 className="text-[16px] font-extrabold text-[#0a0a0a]">어떤 사업을 운영하고 계신가요?</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {BIZ_TYPES.map((t) => (
+                <button key={t.id} onClick={() => setBizType(t.id)}
+                  className={`rounded-xl border p-4 text-left transition-all ${
+                    bizType === t.id
+                      ? "border-[#C9A84C] bg-[#C9A84C]/5 ring-1 ring-[#C9A84C]/30"
+                      : "border-neutral-200 bg-neutral-50 hover:border-neutral-300"
+                  }`}>
+                  <div className="mb-1 text-[20px]">{t.icon}</div>
+                  <div className={`text-[13px] font-bold ${bizType === t.id ? "text-[#0a0a0a]" : "text-neutral-700"}`}>{t.label}</div>
+                  <div className="mt-1 text-[11px] text-neutral-400">{t.desc}</div>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* ─── 2. 기본 정보 ─── */}
+          <section className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
+            <div className="mb-5 flex items-center gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">2</span>
+              <h2 className="text-[16px] font-extrabold text-[#0a0a0a]">기본 정보를 알려주세요</h2>
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">기관명 / 채널명 <span className="text-red-400">*</span></label>
+                <input type="text" value={org} onChange={(e) => setOrg(e.target.value)} placeholder="ex. 우리학원" className={inputClass} />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">담당자 성함 <span className="text-red-400">*</span></label>
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="홍길동" className={inputClass} />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">연락처 <span className="text-red-400">*</span></label>
+                <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="010-0000-0000" className={inputClass} />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">이메일 <span className="text-neutral-300">선택</span></label>
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="example@email.com" className={inputClass} />
+              </div>
+            </div>
+          </section>
+
+          {/* ─── 3. 규모 & 현황 ─── */}
+          <section className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
+            <div className="mb-5 flex items-center gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">3</span>
+              <h2 className="text-[16px] font-extrabold text-[#0a0a0a]">현재 규모와 운영 현황</h2>
+            </div>
+            <div className="flex flex-col gap-6">
+              {/* 규모 */}
+              <div>
+                <div className="mb-2 text-[13px] font-bold text-neutral-600">수강생·원생 수</div>
+                <div className="flex flex-wrap gap-2">
+                  {["~30명", "30~80명", "80~200명", "200명~", "아직 없음"].map((o) => (
+                    <button key={o} onClick={() => setScale(o)} className={scale === o ? pillOn : pillOff}>{o}</button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div>
+                  <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">강사 수 <span className="font-normal text-neutral-400">(본인 외)</span></label>
+                  <input type="number" min="0" value={instructors} onChange={(e) => setInstructors(e.target.value)} placeholder="0" className={inputClass} />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">스태프 수</label>
+                  <input type="number" min="0" value={staff} onChange={(e) => setStaff(e.target.value)} placeholder="0" className={inputClass} />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">운영 기간</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {["준비 중", "1년 미만", "1~3년", "3년~"].map((o) => (
+                      <button key={o} onClick={() => setDuration(o)} className={duration === o ? pillOn : pillOff}>{o}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* 도구 */}
+              <div>
+                <div className="mb-3 text-[13px] font-bold text-neutral-600">현재 사용 중인 도구 <span className="font-normal text-neutral-400">해당하는 항목 모두 선택</span></div>
+                {bizType && (
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {toolCats.map((cat) => (
+                      <div key={cat.id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-4">
+                        <div className="mb-2 text-[12px] font-bold text-neutral-700">{cat.label}</div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {cat.options.map((o) => {
+                            const key = `${cat.id}::${o}`;
+                            return (
+                              <button key={o} onClick={() => toggleTool(cat.id, o)}
+                                className={tools.includes(key) ? pillOn : pillOff}>
+                                {o}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {!bizType && (
+                  <div className="rounded-xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-6 text-center text-[13px] text-neutral-400">
+                    위에서 사업 유형을 먼저 선택해주세요
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+
+          {/* ─── 4. 페인포인트 ─── */}
+          <section className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
+            <div className="mb-5 flex items-center gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">4</span>
+              <h2 className="text-[16px] font-extrabold text-[#0a0a0a]">지금 가장 아픈 문제는? <span className="text-[13px] font-normal text-neutral-400">해당 항목 모두 선택</span></h2>
+            </div>
+            {bizType ? (
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {painCats.map((cat) => (
+                  <div key={cat.id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-4">
+                    <div className="mb-3 text-[12px] font-bold text-neutral-700">{cat.label}</div>
+                    <div className="flex flex-col gap-2">
+                      {cat.items.map((p) => {
+                        const on = pains.includes(p.label);
+                        return (
+                          <button key={p.label} onClick={() => togglePain(p.label)}
+                            className={`w-full rounded-xl border p-3 text-left transition-all ${
+                              on
+                                ? "border-[#C9A84C] bg-[#C9A84C]/5"
+                                : "border-neutral-200 bg-white hover:border-neutral-300"
+                            }`}>
+                            <div className={`text-[12px] font-semibold ${on ? "text-[#0a0a0a]" : "text-neutral-600"}`}>{p.label}</div>
+                            <div className="mt-0.5 text-[11px] text-[#C9A84C]">→ {p.solution}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-6 text-center text-[13px] text-neutral-400">
+                위에서 사업 유형을 먼저 선택해주세요
+              </div>
+            )}
+          </section>
+
+          {/* ─── 5. 예산 & 시점 ─── */}
+          <section className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
+            <div className="mb-5 flex items-center gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">5</span>
+              <h2 className="text-[16px] font-extrabold text-[#0a0a0a]">예산과 시작 시점</h2>
+            </div>
+            <div className="flex flex-col gap-5">
+              <div>
+                <div className="mb-2 text-[13px] font-bold text-neutral-600">초기 제작비 예산</div>
+                <div className="flex flex-wrap gap-2">
+                  {["~500만원", "500만~1,500만원", "1,500만~3,000만원", "3,000만원~", "아직 모름"].map((o) => (
+                    <button key={o} onClick={() => setBuildBudget(o)} className={buildBudget === o ? pillOn : pillOff}>{o}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="mb-2 text-[13px] font-bold text-neutral-600">월 유지보수 예산</div>
+                <div className="flex flex-wrap gap-2">
+                  {["~30만원/월", "30~80만원/월", "80~200만원/월", "협의 필요"].map((o) => (
+                    <button key={o} onClick={() => setMaintBudget(o)} className={maintBudget === o ? pillOn : pillOff}>{o}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="mb-2 text-[13px] font-bold text-neutral-600">원하는 착수 시점</div>
+                <div className="flex flex-wrap gap-2">
+                  {["가능한 빨리", "1개월 내", "3개월 내", "아직 탐색 중"].map((o) => (
+                    <button key={o} onClick={() => setStartTiming(o)} className={startTiming === o ? pillOn : pillOff}>{o}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[13px] font-bold text-neutral-600">추가 요청사항 <span className="font-normal text-neutral-400">선택</span></label>
+                <textarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={3}
+                  placeholder="현재 쓰는 시스템, 원하는 기능, 레퍼런스 사이트 등 자유롭게"
+                  className={`${inputClass} resize-none`} />
+              </div>
+            </div>
+          </section>
+
+          {/* ─── 제출 ─── */}
+          <div className="pb-10 text-center">
+            <button onClick={handleSubmit} disabled={!canSubmit || status === "sending"}
+              className="rounded-full bg-[#C9A84C] px-12 py-4 text-[16px] font-bold text-[#0a0a0a] transition hover:bg-[#e8c96d] disabled:opacity-30">
+              {status === "sending" ? "제출 중..." : "제출하기"}
             </button>
-          ))}
-        </div>
+            {!canSubmit && (
+              <p className="mt-3 text-[12px] text-neutral-400">
+                사업 유형, 기본 정보(기관명·성함·연락처), 페인포인트 1개 이상 선택이 필요합니다
+              </p>
+            )}
+          </div>
 
-        {tab === "structure" ? <StructureView /> : <EditRequestView />}
+        </div>
       </div>
     </div>
   );
