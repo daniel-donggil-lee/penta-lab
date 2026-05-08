@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스스로 공부하는 아이는 이렇게 키웁니다 - 강의안</title>
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  @media print {
+    .slide { page-break-after: always; page-break-inside: avoid; }
+    .slide:last-child { page-break-after: auto; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #e0e0e0; }
+
+  /* Color System - Book Blue Theme */
+  :root {
+    --primary: #4A8EC2;
+    --primary-dark: #2D6A9F;
+    --primary-light: #E8F2FA;
+    --accent: #E8913A;
+    --accent-light: #FFF3E6;
+    --text-dark: #1A1A2E;
+    --text-body: #333333;
+    --text-sub: #666666;
+    --bg-slide: #F5F7FA;
+    --white: #FFFFFF;
+  }
+
+  .slide {
+    width: 1280px; height: 720px;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-slide);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  /* ===== Bottom Bar ===== */
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  }
+
+  /* ===== SLIDE TYPE: Cover ===== */
+  .slide.cover {
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover-inner {
+    text-align: center; padding: 60px;
+  }
+  .cover-subtitle {
+    font-size: 22px; color: var(--primary);
+    letter-spacing: 3px; margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .cover-title {
+    font-size: 56px; font-weight: 800;
+    color: var(--text-dark); line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .cover-title em {
+    font-style: normal; color: var(--primary);
+  }
+  .cover-author {
+    font-size: 22px; color: var(--text-sub);
+    margin-top: 40px;
+  }
+  .cover-publisher {
+    font-size: 16px; color: #999; margin-top: 8px;
+  }
+  .cover-deco {
+    width: 80px; height: 4px;
+    background: var(--primary);
+    margin: 30px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ===== SLIDE TYPE: TOC ===== */
+  .slide.toc { background: var(--white); padding: 80px 100px; }
+  .toc-header {
+    font-size: 18px; color: var(--primary);
+    font-weight: 700; letter-spacing: 2px;
+    margin-bottom: 50px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--primary);
+    display: inline-block;
+  }
+  .toc-list { list-style: none; }
+  .toc-list li {
+    display: flex; align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .toc-num {
+    width: 50px; height: 50px;
+    background: var(--primary);
+    color: white; font-size: 20px; font-weight: 700;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-right: 24px; flex-shrink: 0;
+  }
+  .toc-text {
+    font-size: 26px; color: var(--text-dark); font-weight: 600;
+  }
+
+  /* ===== SLIDE TYPE: Section Divider ===== */
+  .slide.section-divider {
+    background: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .section-divider .section-num {
+    font-size: 20px; color: rgba(255,255,255,0.7);
+    letter-spacing: 4px; font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .section-divider h2 {
+    font-size: 48px; color: white; font-weight: 800;
+    line-height: 1.4;
+  }
+  .section-divider .section-line {
+    width: 60px; height: 3px;
+    background: rgba(255,255,255,0.5);
+    margin: 24px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ===== SLIDE TYPE: Content ===== */
+  .slide.content { padding: 70px 90px 50px; }
+  .slide-tag {
+    font-size: 14px; color: var(--primary);
+    font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .slide-title {
+    font-size: 38px; font-weight: 800;
+    color: var(--text-dark); line-height: 1.3;
+    margin-bottom: 40px;
+  }
+  .slide-title em {
+    font-style: normal; color: var(--primary);
+  }
+  .slide-title .highlight {
+    background: linear-gradient(transparent 60%, #BDDCF5 60%);
+    padding: 0 4px;
+  }
+
+  /* Bullet List */
+  .bullet-list { list-style: none; }
+  .bullet-list li {
+    font-size: 28px; color: var(--text-body);
+    padding: 14px 0 14px 40px;
+    position: relative; line-height: 1.5;
+  }
+  .bullet-list li::before {
+    content: '';
+    position: absolute; left: 0; top: 24px;
+    width: 12px; height: 12px;
+    background: var(--primary);
+    border-radius: 50%;
+  }
+  .bullet-list.accent li::before { background: var(--accent); }
+
+  /* Big Bullet (icon + text) */
+  .big-bullet {
+    display: flex; align-items: flex-start;
+    margin-bottom: 28px;
+  }
+  .big-bullet-icon {
+    width: 56px; height: 56px; flex-shrink: 0;
+    background: var(--primary-light);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; margin-right: 20px;
+  }
+  .big-bullet-text h4 {
+    font-size: 24px; color: var(--text-dark); font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .big-bullet-text p {
+    font-size: 18px; color: var(--text-sub); line-height: 1.5;
+  }
+
+  /* Two Column */
+  .two-col {
+    display: flex; gap: 50px;
+    align-items: flex-start;
+  }
+  .two-col .col { flex: 1; }
+
+  /* Quote Box */
+  .quote-box {
+    background: var(--primary-light);
+    border-left: 5px solid var(--primary);
+    padding: 30px 36px;
+    border-radius: 0 12px 12px 0;
+    margin: 20px 0;
+  }
+  .quote-box p {
+    font-size: 24px; color: var(--primary-dark);
+    line-height: 1.6; font-weight: 500;
+  }
+  .quote-box .source {
+    font-size: 16px; color: var(--text-sub);
+    margin-top: 10px; font-weight: 400;
+  }
+
+  /* Accent Quote Box */
+  .quote-box.accent {
+    background: var(--accent-light);
+    border-left-color: var(--accent);
+  }
+  .quote-box.accent p { color: #8B5E20; }
+
+  /* Card Grid */
+  .card-grid {
+    display: flex; gap: 24px;
+  }
+  .card {
+    flex: 1;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 30px 24px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 1px solid #E8ECF0;
+  }
+  .card-icon {
+    font-size: 48px; margin-bottom: 16px;
+    display: block;
+  }
+  .card h4 {
+    font-size: 22px; color: var(--text-dark); font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .card p {
+    font-size: 16px; color: var(--text-sub); line-height: 1.5;
+  }
+
+  /* Compare Table */
+  .compare-table {
+    width: 100%; border-collapse: collapse;
+    margin-top: 10px;
+  }
+  .compare-table th {
+    background: var(--primary);
+    color: white; font-size: 20px; font-weight: 700;
+    padding: 16px 20px; text-align: center;
+  }
+  .compare-table th:first-child {
+    background: #888; border-radius: 8px 0 0 0;
+  }
+  .compare-table th:nth-child(2) {
+    border-radius: 0;
+  }
+  .compare-table th:last-child {
+    background: var(--accent); border-radius: 0 8px 0 0;
+  }
+  .compare-table td {
+    padding: 16px 20px; font-size: 19px;
+    color: var(--text-body); text-align: center;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+  .compare-table tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+  .compare-table td:first-child { font-weight: 600; background: #f8f8f8; }
+
+  /* Step Flow */
+  .step-flow {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; margin-top: 20px;
+  }
+  .step-item {
+    text-align: center; flex: 1;
+  }
+  .step-circle {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white; font-size: 28px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+  }
+  .step-label {
+    font-size: 18px; color: var(--text-dark); font-weight: 700;
+  }
+  .step-desc {
+    font-size: 14px; color: var(--text-sub); margin-top: 4px;
+  }
+  .step-arrow {
+    font-size: 32px; color: var(--primary); font-weight: 300;
+    flex: 0 0 auto;
+  }
+
+  /* Big Number */
+  .big-num {
+    font-size: 120px; font-weight: 900;
+    color: var(--primary); opacity: 0.15;
+    position: absolute; right: 80px; top: 40px;
+    line-height: 1;
+  }
+
+  /* Closing Slide */
+  .slide.closing {
+    background: var(--primary-dark);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .closing h2 {
+    font-size: 44px; color: white; font-weight: 800;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+  .closing p {
+    font-size: 22px; color: rgba(255,255,255,0.7);
+  }
+
+  /* Break Slide */
+  .slide.break-slide {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e8ecf0 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .break-slide h2 {
+    font-size: 52px; color: var(--text-dark); font-weight: 300;
+    letter-spacing: 4px;
+  }
+  .break-slide p {
+    font-size: 20px; color: var(--text-sub); margin-top: 16px;
+  }
+
+  /* Page Number */
+  .page-num {
+    position: absolute; bottom: 20px; right: 40px;
+    font-size: 14px; color: #bbb; font-weight: 500;
+  }
+
+  /* Emphasis Block */
+  .emphasis-block {
+    background: var(--primary);
+    color: white;
+    padding: 40px 50px;
+    border-radius: 16px;
+    text-align: center;
+    margin: 20px 0;
+  }
+  .emphasis-block h3 {
+    font-size: 36px; font-weight: 800; line-height: 1.5;
+  }
+  .emphasis-block h3 span {
+    color: #FFD166;
+  }
+
+  /* Small text */
+  .small-note {
+    font-size: 14px; color: #999;
+    position: absolute; bottom: 30px; left: 90px;
+  }
+
+  /* Workbook intro */
+  .workbook-preview {
+    background: var(--white);
+    border: 2px solid var(--primary);
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+  }
+  .workbook-preview h4 {
+    font-size: 22px; color: var(--primary); font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .workbook-preview ul {
+    list-style: none;
+  }
+  .workbook-preview li {
+    font-size: 18px; color: var(--text-body);
+    padding: 8px 0 8px 28px; position: relative;
+  }
+  .workbook-preview li::before {
+    content: '\2713'; position: absolute; left: 0;
+    color: var(--primary); font-weight: 700;
+  }
+
+  /* Subject Card */
+  .subject-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .subject-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 24px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-top: 4px solid var(--primary);
+  }
+  .subject-card h4 {
+    font-size: 22px; color: var(--primary-dark); font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .subject-card p {
+    font-size: 15px; color: var(--text-sub); line-height: 1.6;
+  }
+  .subject-card.accent-border { border-top-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ========== SLIDE 1: COVER ========== -->
+<div class="slide cover">
+  <div class="cover-inner">
+    <p class="cover-subtitle">8살에 시작해서 평생 가는 자기주도 학습 로드맵</p>
+    <h1 class="cover-title"><em>스스로 공부하는 아이는</em><br>이렇게 키웁니다</h1>
+    <div class="cover-deco"></div>
+    <p class="cover-author">이은경</p>
+    <p class="cover-publisher">서교책방</p>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ========== SLIDE 2: TOC ========== -->
+<div class="slide toc">
+  <span class="toc-header">CONTENTS</span>
+  <ul class="toc-list">
+    <li>
+      <span class="toc-num">1</span>
+      <span class="toc-text">왜 초등에서 시작해야 할까</span>
+    </li>
+    <li>
+      <span class="toc-num">2</span>
+      <span class="toc-text">단계별 자기주도 학습법</span>
+    </li>
+    <li>
+      <span class="toc-num">3</span>
+      <span class="toc-text">과목별 자기주도 학습법</span>
+    </li>
+    <li>
+      <span class="toc-num">4</span>
+      <span class="toc-text">부모의 역할</span>
+    </li>
+    <li>
+      <span class="toc-num">5</span>
+      <span class="toc-text">배움 공책 활용법</span>
+    </li>
+  </ul>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ========== SLIDE 3: Section 1 Divider ========== -->
+<div class="slide section-divider">
+  <div>
+    <p class="section-num">CHAPTER 01</p>
+    <h2>스스로 공부하는 습관,<br>왜 초등에서 시작해야 할까</h2>
+    <div class="section-line"></div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 4: 프롤로그 질문 ========== -->
+<div class="slide content">
+  <p class="slide-tag">PROLOGUE</p>
+  <h3 class="slide-title">아이를 키우다 보면 부모는<br>같은 질문 앞에 서게 됩니다</h3>
+  <div class="quote-box" style="margin-top: 30px;">
+    <p>"도대체 공부는 언제부터 스스로 하게 될까?"</p>
+  </div>
+  <div style="margin-top: 40px;">
+    <ul class="bullet-list">
+      <li>숙제를 챙겨줘야 하고, 공부할 시간을 정해줘야 하고</li>
+      <li>어느 순간 아이의 공부가 아니라 부모의 공부가 된 것 같은 날</li>
+      <li>자기주도 학습은 특별한 방법이 아니라, 작은 경험들이 쌓여 만들어지는 힘</li>
+    </ul>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">3</span>
+</div>
+
+<!-- ========== SLIDE 5: 초등 6년의 중요성 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 01</p>
+  <h3 class="slide-title"><em>초등 6년</em>은 인생 전체로 보면<br>짧지만 많은 것이 결정되는 시기</h3>
+  <div class="big-num">6</div>
+  <div style="margin-top: 20px;">
+    <ul class="bullet-list">
+      <li>입학할 때 120cm이던 아이가 졸업할 즈음 160cm</li>
+      <li>1학년 때 맡았던 아이들을 6학년 때 다시 가르쳐보면<br>&nbsp;&nbsp;&nbsp;외모, 말투, 성적, 습관, 성향 등 모든 면에서 달라져 있습니다</li>
+      <li>이 시기를 어떻게 보내느냐에 따라 아이들은 매우 다르게 성장합니다</li>
+    </ul>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">4</span>
+</div>
+
+<!-- ========== SLIDE 6: 초등 공부의 목표 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 01</p>
+  <h3 class="slide-title">초등 공부의 목표는<br><span class="highlight">대학 입시가 아닙니다</span></h3>
+  <div style="margin-top: 20px;">
+    <ul class="bullet-list">
+      <li>초등 공부를 '입시의 시작'으로 바라보면 부모의 마음도 불안해집니다</li>
+      <li>초등 시기에는 <strong>인생 전체를 위한 경험과 배움</strong>을 쌓아야 합니다</li>
+      <li>"배우는 건 재미있다"라는 감각 vs "공부는 늘 쫓기는 일이다"라는 기억</li>
+    </ul>
+  </div>
+  <div class="emphasis-block" style="margin-top: 30px;">
+    <h3>초등 시기는 아이가 가장 자연스럽게<br>가장 흔들림 없이 <span>기초를 세울 수 있는</span> 시간입니다</h3>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">5</span>
+</div>
+
+<!-- ========== SLIDE 7: 속도 vs 방향 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 01</p>
+  <h3 class="slide-title">초등 공부는<br><em>속도</em>보다 <em>방향</em>입니다</h3>
+  <table class="compare-table" style="margin-top: 30px;">
+    <tr>
+      <th>구분</th><th>속도 위주</th><th>방향 위주</th>
+    </tr>
+    <tr>
+      <td>공부 시간</td>
+      <td>방과 후 대부분 학원 수업과 숙제</td>
+      <td>매일 독서와 운동 시간 확보,<br>최소 분량으로 시작</td>
+    </tr>
+    <tr>
+      <td>공부 방법</td>
+      <td>학원, 과외, 온라인 등 수업 통해<br>레벨 높이기</td>
+      <td>한글/영어 독서 위주,<br>교과서 복습 기반</td>
+    </tr>
+    <tr>
+      <td>주요 교재</td>
+      <td>학원 교재, 태블릿 학습 등</td>
+      <td>교과서, 배움 공책, 문제집 등</td>
+    </tr>
+    <tr>
+      <td>공부 목표</td>
+      <td>단원평가 점수, 석차, 빠른 선행</td>
+      <td>생각하는 힘 키우기,<br>바른 공부 습관과 독서 습관</td>
+    </tr>
+  </table>
+  <div class="bottom-bar"></div>
+  <span class="page-num">6</span>
+</div>
+
+<!-- ========== SLIDE 8: 자기주도 학습의 골든타임 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 01</p>
+  <h3 class="slide-title">자기주도 학습의 <em>골든타임</em>이<br>초등인 이유</h3>
+  <div class="two-col" style="margin-top: 20px;">
+    <div class="col">
+      <div class="big-bullet">
+        <div class="big-bullet-icon">1</div>
+        <div class="big-bullet-text">
+          <h4>가장 자연스럽게 배우는 시기</h4>
+          <p>흔들림 없이 기초를 세울 수 있는 유일한 시간</p>
+        </div>
+      </div>
+      <div class="big-bullet">
+        <div class="big-bullet-icon">2</div>
+        <div class="big-bullet-text">
+          <h4>부모의 영향력이 가장 큰 시기</h4>
+          <p>사춘기 이전, 부모의 적절한 도움이 가능한 때</p>
+        </div>
+      </div>
+      <div class="big-bullet">
+        <div class="big-bullet-icon">3</div>
+        <div class="big-bullet-text">
+          <h4>습관의 뿌리가 내리는 시기</h4>
+          <p>초등에서 익히지 못하면 중고등으로 갈수록 어려워짐</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="quote-box accent">
+        <p>정말 중요한 것은<br><strong>'제대로 된 공부 습관'</strong>과<br><strong>'자기주도 학습'</strong>입니다.</p>
+        <p style="margin-top: 16px;">이 두 가지는 평생 공부의 기초 체력이 되고<br>성취와 결과를 만드는 밑바탕이 됩니다.</p>
+        <p class="source">- 본문 중에서</p>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">7</span>
+</div>
+
+<!-- ========== SLIDE 9: 부모의 흔한 착각 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 01</p>
+  <h3 class="slide-title">초등 자기주도 학습에 관한<br><em>부모의 가장 흔한 착각</em></h3>
+  <div class="card-grid" style="margin-top: 30px;">
+    <div class="card">
+      <span class="card-icon">&#x1F4A1;</span>
+      <h4>"아직 어리니까<br>나중에 해도 돼"</h4>
+      <p>초등 고학년이 되면 이미<br>'이제 제가 알아서 할게요'<br>라는 내색이 시작됩니다</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">&#x1F3C3;</span>
+      <h4>"학원에 보내면<br>알아서 되겠지"</h4>
+      <p>학원은 지식을 전달하지만<br>공부의 주도권을 넘기는 건<br>부모만 할 수 있는 일입니다</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">&#x1F4CA;</span>
+      <h4>"점수가 잘 나오면<br>잘 하고 있는 거야"</h4>
+      <p>단원평가 점수보다 중요한 건<br>어떤 태도와 습관을 가진<br>중학생이 될 것인가입니다</p>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">8</span>
+</div>
+
+<!-- ========== SLIDE 10: Section 2 Divider ========== -->
+<div class="slide section-divider">
+  <div>
+    <p class="section-num">CHAPTER 02</p>
+    <h2>초등을 위한 단계별<br>자기주도 학습법</h2>
+    <div class="section-line"></div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 11: 4단계 Overview ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 02</p>
+  <h3 class="slide-title">자기주도 학습 <em>4단계</em> 로드맵</h3>
+  <div class="step-flow" style="margin-top: 50px;">
+    <div class="step-item">
+      <div class="step-circle">1</div>
+      <p class="step-label">습관 잡기</p>
+      <p class="step-desc">공부 근육 만들기</p>
+    </div>
+    <span class="step-arrow">&#x27A1;</span>
+    <div class="step-item">
+      <div class="step-circle">2</div>
+      <p class="step-label">경험하기</p>
+      <p class="step-desc">공부 계획 세우기</p>
+    </div>
+    <span class="step-arrow">&#x27A1;</span>
+    <div class="step-item">
+      <div class="step-circle">3</div>
+      <p class="step-label">실천하기</p>
+      <p class="step-desc">실전 공부법 5가지</p>
+    </div>
+    <span class="step-arrow">&#x27A1;</span>
+    <div class="step-item">
+      <div class="step-circle">4</div>
+      <p class="step-label">돌아보기</p>
+      <p class="step-desc">점검하고 칭찬하기</p>
+    </div>
+  </div>
+  <div class="quote-box" style="margin-top: 50px;">
+    <p>공부의 시작이 습관인 이유 &#x2192; 공부 근육이 자기주도가 되도록 돕는 부모의 말</p>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">10</span>
+</div>
+
+<!-- ========== SLIDE 12: 1단계 습관 잡기 ========== -->
+<div class="slide content">
+  <p class="slide-tag">STEP 1</p>
+  <h3 class="slide-title"><em>습관 잡기</em> &#x2014; 공부 근육 만들기</h3>
+  <div class="big-num">1</div>
+  <div class="two-col" style="margin-top: 20px;">
+    <div class="col">
+      <div class="big-bullet">
+        <div class="big-bullet-icon">&#x1F4AA;</div>
+        <div class="big-bullet-text">
+          <h4>공부의 시작이 습관인 이유</h4>
+          <p>매일 조금씩이라도 앉아서 공부하는 경험이 근육이 됩니다</p>
+        </div>
+      </div>
+      <div class="big-bullet">
+        <div class="big-bullet-icon">&#x2B50;</div>
+        <div class="big-bullet-text">
+          <h4>공부 근육이 생긴 아이들의 특징</h4>
+          <p>스스로 책상에 앉고, 할 일을 인식하고, 끝까지 해내는 힘</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="quote-box accent">
+        <p><strong>부모의 말</strong>이 공부 근육을<br>키울 수도, 무너뜨릴 수도 있습니다</p>
+        <p style="margin-top: 12px; font-size: 20px;">
+          &#x274C; "빨리 해" "왜 아직도 안 했어"<br>
+          &#x2705; "오늘은 뭐부터 해볼까?"<br>
+          &#x2705; "어제보다 조금 더 했네"
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">11</span>
+</div>
+
+<!-- ========== SLIDE 13: 2단계 경험하기 ========== -->
+<div class="slide content">
+  <p class="slide-tag">STEP 2</p>
+  <h3 class="slide-title"><em>경험하기</em> &#x2014; 공부 계획 세우기</h3>
+  <div class="big-num">2</div>
+  <div style="margin-top: 20px;">
+    <div class="big-bullet">
+      <div class="big-bullet-icon">&#x1F4DD;</div>
+      <div class="big-bullet-text">
+        <h4>내 아이의 첫 공부 계획, 시작은 대화</h4>
+        <p>"이번 주에 뭘 공부하면 좋겠어?" 부터 시작합니다</p>
+      </div>
+    </div>
+    <div class="big-bullet">
+      <div class="big-bullet-icon">&#x1F4C5;</div>
+      <div class="big-bullet-text">
+        <h4>스터디 플래너 쓰기</h4>
+        <p>계획을 눈에 보이게 만들고, 직접 체크하는 경험</p>
+      </div>
+    </div>
+    <div class="big-bullet">
+      <div class="big-bullet-icon">&#x1F3AF;</div>
+      <div class="big-bullet-text">
+        <h4>부모의 진짜 역할은 주도권 넘기기</h4>
+        <p>처음에는 서투르고 실수도 많지만, 그 과정이 진짜 배움입니다</p>
+      </div>
+    </div>
+  </div>
+  <div class="emphasis-block" style="margin-top: 20px;">
+    <h3>계획은 <span>정답이 아닌 과정</span>입니다</h3>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">12</span>
+</div>
+
+<!-- ========== SLIDE 14: 3단계 실천하기 ========== -->
+<div class="slide content">
+  <p class="slide-tag">STEP 3</p>
+  <h3 class="slide-title"><em>실천하기</em> &#x2014; 실전 공부법 5가지</h3>
+  <div style="margin-top: 20px; display: flex; gap: 16px;">
+    <div class="card" style="border-top: 4px solid var(--primary);">
+      <span class="card-icon" style="font-size: 36px;">&#x1F4D6;</span>
+      <h4 style="font-size: 18px;">1. 개념 이해</h4>
+      <p style="font-size: 14px;">공부의 시작은<br>교과서로</p>
+    </div>
+    <div class="card" style="border-top: 4px solid var(--primary);">
+      <span class="card-icon" style="font-size: 36px;">&#x270D;</span>
+      <h4 style="font-size: 18px;">2. 개념 공책</h4>
+      <p style="font-size: 14px;">나의 언어로<br>이해하고 정리</p>
+    </div>
+    <div class="card" style="border-top: 4px solid var(--primary);">
+      <span class="card-icon" style="font-size: 36px;">&#x1F4AD;</span>
+      <h4 style="font-size: 18px;">3. 배움 공책</h4>
+      <p style="font-size: 14px;">사고력을 키우는<br>공부 습관</p>
+    </div>
+    <div class="card" style="border-top: 4px solid var(--primary);">
+      <span class="card-icon" style="font-size: 36px;">&#x2753;</span>
+      <h4 style="font-size: 18px;">4. 문제 풀이</h4>
+      <p style="font-size: 14px;">정답률보다<br>사고력을 목표로</p>
+    </div>
+    <div class="card" style="border-top: 4px solid var(--primary);">
+      <span class="card-icon" style="font-size: 36px;">&#x1F50D;</span>
+      <h4 style="font-size: 18px;">5. 오답 공책</h4>
+      <p style="font-size: 14px;">답을 찾아가는<br>과정</p>
+    </div>
+  </div>
+  <div class="quote-box" style="margin-top: 24px;">
+    <p>핵심: 정답을 맞히는 것보다 <strong>스스로 생각하고 정리하는 경험</strong>이 진짜 공부</p>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">13</span>
+</div>
+
+<!-- ========== SLIDE 15: 4단계 돌아보기 ========== -->
+<div class="slide content">
+  <p class="slide-tag">STEP 4</p>
+  <h3 class="slide-title"><em>돌아보기</em> &#x2014; 점검하고 칭찬하기</h3>
+  <div class="big-num">4</div>
+  <div class="two-col" style="margin-top: 20px;">
+    <div class="col">
+      <div class="big-bullet">
+        <div class="big-bullet-icon">&#x2705;</div>
+        <div class="big-bullet-text">
+          <h4>단계별 공부 점검법</h4>
+          <p>한 주 단위로 아이와 함께 돌아보기</p>
+        </div>
+      </div>
+      <div class="big-bullet">
+        <div class="big-bullet-icon">&#x1F4AC;</div>
+        <div class="big-bullet-text">
+          <h4>공부를 점검하는 부모의 말</h4>
+          <p>"이번 주에 가장 재미있었던 공부는 뭐야?"<br>"어려웠던 건 어떻게 해결했어?"</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="background: var(--primary-light); border: none;">
+        <span class="card-icon">&#x1F3C6;</span>
+        <h4>자기주도 학습의 성공 비결</h4>
+        <p style="text-align: left; font-size: 18px; line-height: 1.8;">
+          결과가 아닌 <strong>과정</strong>을 칭찬하기<br>
+          남과 비교하지 않기<br>
+          작은 성공 경험 쌓아주기<br>
+          실패해도 다시 시도할 수 있다는 믿음
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">14</span>
+</div>
+
+<!-- ========== SLIDE 16: Break ========== -->
+<div class="slide break-slide">
+  <div>
+    <h2>Break time</h2>
+    <p>잠시 쉬어가겠습니다</p>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ========== SLIDE 17: Section 3 Divider ========== -->
+<div class="slide section-divider">
+  <div>
+    <p class="section-num">CHAPTER 03</p>
+    <h2>중고등까지 이어지는<br>과목별 자기주도 학습법</h2>
+    <div class="section-line"></div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 18: 과목별 학습법 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 03</p>
+  <h3 class="slide-title">과목별 <em>핵심 학습 전략</em></h3>
+  <div class="subject-grid" style="margin-top: 30px;">
+    <div class="subject-card">
+      <h4>&#x1F4D6; 국어</h4>
+      <p>문학 작품 경험하기 / 비문학 읽기 훈련 / 독해의 장벽을 낮추는 배경지식 / 한자, 어휘력 기초 체력</p>
+    </div>
+    <div class="subject-card accent-border">
+      <h4>&#x1F522; 수학</h4>
+      <p>풀이 과정 쓰는 연습 / 문제집 활용하기 / 한 문제를 여러 방법으로 / 관련 개념끼리 관계 짓기</p>
+    </div>
+    <div class="subject-card">
+      <h4>&#x1F30D; 영어</h4>
+      <p>문장을 읽어내는 힘 / 듣기평가 대비 / 영어 말하기 / 이휘 교재 활용</p>
+    </div>
+    <div class="subject-card accent-border">
+      <h4>&#x1F3DB; 사회</h4>
+      <p>영역별 학습 내용 정리 / 배움 공책 활용 / 신문, 잡지 / 교과서 속 장소 견학</p>
+    </div>
+    <div class="subject-card">
+      <h4>&#x1F52C; 과학</h4>
+      <p>문제집 활용 / 과학 글쓰기 / 일상 속 탐구 경험 / 디지털 교과서 활용</p>
+    </div>
+    <div class="subject-card accent-border">
+      <h4>&#x1F916; AI 활용</h4>
+      <p>국어: 핵심 추출, 생각 구조화 / 수학: 개념 이해와 풀이 점검 / 영어: 문장 노출과 반복</p>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">17</span>
+</div>
+
+<!-- ========== SLIDE 19: Section 4 Divider ========== -->
+<div class="slide section-divider">
+  <div>
+    <p class="section-num">CHAPTER 04</p>
+    <h2>스스로 공부하는 아이로<br>자라도록 돕는 부모의 역할</h2>
+    <div class="section-line"></div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 20: 집중 환경 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 04</p>
+  <h3 class="slide-title"><em>집중이 잘되는</em><br>공부 환경 조성하기</h3>
+  <div class="card-grid" style="margin-top: 30px;">
+    <div class="card">
+      <span class="card-icon">&#x1F4A1;</span>
+      <h4>집중해본 경험의 힘</h4>
+      <p>"집중하는 경험이 쌓이면<br>아이는 집중하는 법을<br>스스로 터득합니다"</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">&#x1F3E0;</span>
+      <h4>최적의 환경 만들기</h4>
+      <p>아이 전용 공부 공간<br>시각적 방해물 제거<br>소음 관리</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">&#x1F4F1;</span>
+      <h4>스마트폰과 집중력</h4>
+      <p>공부 시간에는 스마트폰을<br>눈에 보이지 않는 곳에<br>두는 것만으로도 효과</p>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">19</span>
+</div>
+
+<!-- ========== SLIDE 21: 생활 리듬 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 04</p>
+  <h3 class="slide-title">기본적인 <em>생활 리듬</em> 지키기</h3>
+  <div class="two-col" style="margin-top: 30px;">
+    <div class="col">
+      <div class="big-bullet">
+        <div class="big-bullet-icon">&#x1F35C;</div>
+        <div class="big-bullet-text">
+          <h4>잘 먹기</h4>
+          <p>뇌와 몸에 에너지를 채우는 기본</p>
+        </div>
+      </div>
+      <div class="big-bullet">
+        <div class="big-bullet-icon">&#x1F4A4;</div>
+        <div class="big-bullet-text">
+          <h4>잘 자기</h4>
+          <p>성장기 아이의 수면은 학습 효율과 직결</p>
+        </div>
+      </div>
+      <div class="big-bullet">
+        <div class="big-bullet-icon">&#x1F3D6;</div>
+        <div class="big-bullet-text">
+          <h4>잘 쉬기</h4>
+          <p>쉼 없는 공부는 지속 가능하지 않습니다</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="emphasis-block" style="text-align: left; padding: 30px;">
+        <h3 style="font-size: 24px; line-height: 1.8;">
+          스크린 타임 원칙 세우기<br><br>
+          <span style="font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.9);">
+          &#x2022; 계획하고 조절하는 습관<br>
+          &#x2022; 게임도 계획 안에서<br>
+          &#x2022; 게임 말고 다른 취미 갖기
+          </span>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">20</span>
+</div>
+
+<!-- ========== SLIDE 22: 부모가 먼저 ========== -->
+<div class="slide content">
+  <p class="slide-tag">CHAPTER 04</p>
+  <h3 class="slide-title"><span class="highlight">부모가 먼저 이끌어야</span><br>스스로 공부하는 아이로 자랍니다</h3>
+  <div style="margin-top: 30px;">
+    <ul class="bullet-list">
+      <li>부모니까 어쩔 수 없이 늘 고민합니다</li>
+      <li>지금 내가 하는 방법이 맞는지, 아이에게 더 해줘야 하는 것은 없는지</li>
+      <li>완벽한 방법을 찾지 못해도 괜찮습니다</li>
+      <li><strong>아이와 함께 하루하루 배우며 조금씩 나아가면 됩니다</strong></li>
+    </ul>
+  </div>
+  <div class="quote-box" style="margin-top: 30px;">
+    <p>스스로 공부하는 아이는 특별한 아이가 아니라,<br>그렇게 <strong>자랄 시간을 가진 아이</strong>라는 사실</p>
+    <p class="source">- 프롤로그 중에서</p>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">21</span>
+</div>
+
+<!-- ========== SLIDE 23: Section 5 Divider ========== -->
+<div class="slide section-divider" style="background: var(--accent);">
+  <div>
+    <p class="section-num">SPECIAL</p>
+    <h2>배움 공책 활용법</h2>
+    <div class="section-line"></div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 24: 배움 공책 소개 ========== -->
+<div class="slide content">
+  <p class="slide-tag">SPECIAL</p>
+  <h3 class="slide-title"><em>배움 공책</em>이란?</h3>
+  <div class="two-col" style="margin-top: 20px;">
+    <div class="col">
+      <div class="quote-box" style="margin-bottom: 20px;">
+        <p>복습은 누군가 정리해 준 내용을 옮겨 적는 것이 아닙니다.<br><br>오늘 수업에 배운 내용을 <strong>내 생각대로 남기는</strong> 순간 비로소 나의 것이 됩니다.</p>
+      </div>
+      <ul class="bullet-list">
+        <li>처음에는 서투르고 짧아도 괜찮습니다</li>
+        <li>매일 조금씩 쓰다 보면 생각을 정리하는 힘이 자라납니다</li>
+        <li>중요한 건 '잘 쓰는 것'이 아니라 '스스로 정리하는 것'</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="workbook-preview">
+        <h4>배움 공책 쓰는 법 4단계</h4>
+        <ul>
+          <li>오늘 배운 것 중 가장 중요한 내용을 골라보세요</li>
+          <li>'나의 언어'로 다시 설명해보세요</li>
+          <li>궁금한 점이나 더 알고 싶은 것을 적어보세요</li>
+          <li>한 주를 돌아보는 시간을 가져보세요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">23</span>
+</div>
+
+<!-- ========== SLIDE 25: 배움 공책 구성 ========== -->
+<div class="slide content">
+  <p class="slide-tag">SPECIAL</p>
+  <h3 class="slide-title">배움 공책 <em>구성</em></h3>
+  <div class="card-grid" style="margin-top: 30px;">
+    <div class="card" style="border-top: 4px solid var(--primary);">
+      <span class="card-icon">&#x1F4D3;</span>
+      <h4>오늘, 나의 배움 기록</h4>
+      <p>과목별 오늘의 배움 기록<br>하루 한 줄 정리<br>"오늘의 나는 어떤 학생?"<br>자기 점검 체크리스트</p>
+    </div>
+    <div class="card" style="border-top: 4px solid var(--accent);">
+      <span class="card-icon">&#x1F4C8;</span>
+      <h4>이번 주, 나의 성장 기록</h4>
+      <p>LEARN - 배움<br>GROW - 성장<br>TOMORROW - 다짐<br>한 주 태도 자기 평가</p>
+    </div>
+    <div class="card" style="border-top: 4px solid var(--primary-dark);">
+      <span class="card-icon">&#x1F48E;</span>
+      <h4>배움을 향한 나의 다짐</h4>
+      <p>"나는 앞으로 스스로 선택하고<br>그 선택에 책임을 지는<br>사람이 되겠습니다"</p>
+    </div>
+  </div>
+  <div class="quote-box accent" style="margin-top: 24px;">
+    <p>배움은 양이 아니라 <strong>깊이</strong>입니다. 이 기록은 나만의 작은 배움의 역사이자, 나를 설명해주는 소중한 발자취가 됩니다.</p>
+  </div>
+  <div class="bottom-bar"></div>
+  <span class="page-num">24</span>
+</div>
+
+<!-- ========== SLIDE 26: Closing ========== -->
+<div class="slide closing">
+  <div>
+    <h2>오늘부터, 책에 소개한<br>아주 작은 것 하나만 시작해보세요.<br><br>스스로 공부하는 아이는<br>그 작은 변화에서 시작됩니다.</h2>
+    <p>이은경 | 스스로 공부하는 아이는 이렇게 키웁니다 | 서교책방</p>
+  </div>
+</div>
+
+<!-- ========== SLIDE 27: Thank You ========== -->
+<div class="slide cover" style="background: var(--white);">
+  <div class="cover-inner">
+    <p class="cover-subtitle" style="color: var(--accent);">감사합니다</p>
+    <h1 class="cover-title" style="font-size: 44px;"><em>스스로 공부하는 아이는</em><br>이렇게 키웁니다</h1>
+    <div class="cover-deco"></div>
+    <p class="cover-author" style="margin-top: 30px;">이은경 지음</p>
+    <p class="cover-publisher">서교책방</p>
+    <p style="margin-top: 40px; font-size: 16px; color: #bbb;">Q & A</p>
+  </div>
+  <div class="bottom-bar"></div>
+</div>
+
+</body>
+</html>
