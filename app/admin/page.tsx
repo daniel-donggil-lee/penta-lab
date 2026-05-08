@@ -128,6 +128,7 @@ export default function SurveyPage() {
   const [duration, setDuration] = useState("");
   const [tools, setTools] = useState<string[]>([]);
   const [pains, setPains] = useState<string[]>([]);
+  const [painDetails, setPainDetails] = useState<Record<string, string>>({});
   const [buildBudget, setBuildBudget] = useState("");
   const [maintBudget, setMaintBudget] = useState("");
   const [startTiming, setStartTiming] = useState("");
@@ -144,7 +145,13 @@ export default function SurveyPage() {
   };
 
   const togglePain = (label: string) => {
-    setPains((prev) => prev.includes(label) ? prev.filter((p) => p !== label) : [...prev, label]);
+    setPains((prev) => {
+      if (prev.includes(label)) {
+        setPainDetails((d) => { const next = { ...d }; delete next[label]; return next; });
+        return prev.filter((p) => p !== label);
+      }
+      return [...prev, label];
+    });
   };
 
   const canSubmit = bizType && org && name && phone && pains.length > 0;
@@ -160,7 +167,9 @@ export default function SurveyPage() {
     }).filter(Boolean).join(" / ");
     const painsStr = painCats.map((cat) => {
       const picked = pains.filter((p) => cat.items.some((item) => item.label === p));
-      return picked.length ? `[${cat.label}] ${picked.join(", ")}` : null;
+      if (!picked.length) return null;
+      const items = picked.map((p) => painDetails[p] ? `${p}(${painDetails[p]})` : p);
+      return `[${cat.label}] ${items.join(", ")}`;
     }).filter(Boolean).join(" / ");
 
     const payload = JSON.stringify({
@@ -341,15 +350,25 @@ export default function SurveyPage() {
                       {cat.items.map((p) => {
                         const on = pains.includes(p.label);
                         return (
-                          <button key={p.label} onClick={() => togglePain(p.label)}
-                            className={`w-full rounded-xl border p-3 text-left transition-all ${
-                              on
-                                ? "border-[#C9A84C] bg-[#C9A84C]/5"
-                                : "border-neutral-200 bg-white hover:border-neutral-300"
-                            }`}>
-                            <div className={`text-[12px] font-semibold ${on ? "text-[#0a0a0a]" : "text-neutral-600"}`}>{p.label}</div>
-                            <div className="mt-0.5 text-[11px] text-[#C9A84C]">→ {p.solution}</div>
-                          </button>
+                          <div key={p.label}>
+                            <button onClick={() => togglePain(p.label)}
+                              className={`w-full rounded-xl border p-3 text-left transition-all ${
+                                on
+                                  ? "border-[#C9A84C] bg-[#C9A84C]/5"
+                                  : "border-neutral-200 bg-white hover:border-neutral-300"
+                              }`}>
+                              <div className={`text-[12px] font-semibold ${on ? "text-[#0a0a0a]" : "text-neutral-600"}`}>{p.label}</div>
+                              <div className="mt-0.5 text-[11px] text-[#C9A84C]">→ {p.solution}</div>
+                            </button>
+                            {on && (
+                              <input type="text"
+                                value={painDetails[p.label] || ""}
+                                onChange={(e) => setPainDetails((d) => ({ ...d, [p.label]: e.target.value }))}
+                                placeholder="구체적인 상황을 알려주시면 더 정확한 진단이 가능합니다"
+                                className="mt-1.5 w-full rounded-lg border border-[#C9A84C]/20 bg-[#C9A84C]/5 px-3 py-2 text-[12px] text-neutral-700 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]"
+                              />
+                            )}
+                          </div>
                         );
                       })}
                     </div>
