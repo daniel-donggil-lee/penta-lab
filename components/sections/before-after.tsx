@@ -126,7 +126,7 @@ export default function BeforeAfter() {
           <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">
             도입 후, 이렇게 달라집니다
           </h2>
-          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
+          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500 break-keep">
             시스템 하나로 반복 업무가 사라집니다. 실제 사용자들의 변화입니다.
           </p>
         </AnimatedSection>

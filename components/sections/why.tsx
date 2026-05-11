@@ -78,7 +78,7 @@ export default function Why() {
           <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em] text-white">
             우리가 쓰는 걸 팝니다
           </h2>
-          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-white/50">
+          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-white/50 break-keep">
             직접 운영하며 검증한 시스템입니다. 데모가 곧 레퍼런스입니다.
           </p>
         </AnimatedSection>

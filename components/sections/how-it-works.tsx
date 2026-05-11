@@ -18,7 +18,7 @@ export default function HowItWorks() {
         <AnimatedSection>
           <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">프로세스</p>
           <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">4단계로 완성됩니다</h2>
-          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
+          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500 break-keep">
             상담 신청부터 시스템 완성까지 8주. 구축 이후에는 월 리테이너로 계속 관리합니다.
           </p>
         </AnimatedSection>

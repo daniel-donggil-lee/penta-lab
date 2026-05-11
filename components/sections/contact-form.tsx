@@ -66,7 +66,7 @@ export default function ContactForm() {
           <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">
             지금 신청하면 24시간 내 연락드립니다
           </h2>
-          <p className="mx-auto mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
+          <p className="mx-auto mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500 break-keep">
             부담 없이 작성해주세요. 현재 가장 어려운 점 하나만 적어도 됩니다.
           </p>
         </AnimatedSection>
