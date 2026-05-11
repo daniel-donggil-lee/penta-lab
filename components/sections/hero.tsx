@@ -107,10 +107,10 @@ export default function Hero() {
               무료 상담 신청 →
             </Link>
             <Link
-              href="#pain"
+              href="/penta-lab/survey"
               className="inline-flex items-center gap-2 border-b border-white/30 pb-0.5 text-[15px] font-medium text-white/70 transition hover:text-white"
             >
-              자가진단 해보기 ↓
+              자가진단 해보기 →
             </Link>
           </div>
 
