@@ -65,6 +65,38 @@ export default function BeforeAfter() {
           <TabsContent value="a"><BAGrid items={BA_A} /></TabsContent>
           <TabsContent value="b"><BAGrid items={BA_B} /></TabsContent>
         </Tabs>
+
+        {/* Testimonials */}
+        <div className="mt-14 grid grid-cols-2 gap-5 max-md:grid-cols-1">
+          {[
+            {
+              quote: "매달 미납 전화하는 게 제일 스트레스였는데, 이제 시스템이 알아서 알림을 보내니까 학부모와 관계가 오히려 좋아졌어요.",
+              name: "김 원장",
+              role: "경기 소재 영어학원 · 원생 80명",
+            },
+            {
+              quote: "리포트를 매주 직접 쓰다가 자동화하고 나니 월 8시간이 그냥 생겼어요. 그 시간에 수업 준비를 더 하게 됩니다.",
+              name: "이 원장",
+              role: "경기 소재 국어·영어 통합학원 · 원생 150명",
+            },
+          ].map((t, i) => (
+            <AnimatedSection key={t.name} animation="fade-up" delay={i * 150}>
+              <div className="rounded-2xl border border-neutral-200 bg-white p-7">
+                <div className="mb-4 text-[24px] leading-none text-[#C9A84C]">"</div>
+                <p className="mb-5 text-[14px] leading-[1.8] text-neutral-600">{t.quote}</p>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#C9A84C]/10 text-[13px] font-bold text-[#C9A84C]">
+                    {t.name[0]}
+                  </div>
+                  <div>
+                    <div className="text-[13px] font-bold text-[#0a0a0a]">{t.name}</div>
+                    <div className="text-[11px] text-neutral-400">{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
       </div>
     </section>
   );
