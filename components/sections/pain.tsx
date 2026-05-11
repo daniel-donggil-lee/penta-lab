@@ -35,8 +35,8 @@ function PainGrid({ items }: { items: typeof TRACK_A }) {
         ))}
       </div>
       <AnimatedSection animation="fade-up" delay={500}>
-        <Link href="/survey" className="flex items-center justify-between rounded-xl bg-[#0a0a0a] px-7 py-5 text-[16px] font-bold text-white transition-all duration-300 hover:bg-neutral-800 hover:shadow-lg">
-          이 중 <span className="text-[#C9A84C]">&nbsp;1개라도&nbsp;</span> 해당되면, 자가진단 해보기 →
+        <Link href="/survey" className="flex items-center justify-center gap-1 rounded-xl bg-[#0a0a0a] px-7 py-5 text-[16px] font-bold text-white transition-all duration-300 hover:bg-neutral-800 hover:shadow-lg">
+          이 중 <span className="text-[#C9A84C]">1개라도</span> 해당되면, 자가진단 해보기 →
         </Link>
       </AnimatedSection>
     </>
