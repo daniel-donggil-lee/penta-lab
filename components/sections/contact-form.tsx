@@ -54,7 +54,7 @@ export default function ContactForm() {
     { key: "bizName", label: "사업체 이름 *", placeholder: "학원명 또는 채널명·브랜드명", type: "input" },
     { key: "bizType", label: "유형 *", type: "select" },
     { key: "scale", label: "원생 / 수강생 수 *", type: "scale" },
-    { key: "pain", label: "가장 아픈 문제 *", placeholder: "지금 가장 해결하고 싶은 것을 자유롭게 적어주세요", type: "textarea" },
+    { key: "pain", label: "현재 가장 어려운 점 *", placeholder: "지금 가장 해결하고 싶은 것을 자유롭게 적어주세요", type: "textarea" },
     { key: "phone", label: "연락처 *", placeholder: "010-0000-0000", type: "tel" },
   ];
 
@@ -67,7 +67,7 @@ export default function ContactForm() {
             지금 신청하면 24시간 내 연락드립니다
           </h2>
           <p className="mx-auto mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
-            부담 없이 작성해주세요. 가장 아픈 문제 하나만 적어도 됩니다.
+            부담 없이 작성해주세요. 현재 가장 어려운 점 하나만 적어도 됩니다.
           </p>
         </AnimatedSection>
 
@@ -116,7 +116,7 @@ export default function ContactForm() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-[13px] font-bold">가장 아픈 문제 *</label>
+                  <label className="mb-2 block text-[13px] font-bold">현재 가장 어려운 점 *</label>
                   <Textarea required value={form.pain} onChange={set("pain")} placeholder="지금 가장 해결하고 싶은 것을 자유롭게 적어주세요" className="min-h-[96px] rounded-xl border-neutral-200 text-[15px] transition-all duration-200 focus-visible:ring-[#C9A84C] focus-visible:border-[#C9A84C]" />
                 </div>
 
