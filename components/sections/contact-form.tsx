@@ -95,7 +95,9 @@ export default function ContactForm() {
                       <option value="">선택해주세요</option>
                       <option value="오프라인 학원">오프라인 학원</option>
                       <option value="온라인 교육 사업자">온라인 교육 사업자</option>
-                      <option value="둘 다">둘 다</option>
+                      <option value="프랜차이즈 본사">프랜차이즈 본사</option>
+                      <option value="콘텐츠 크리에이터">콘텐츠 크리에이터</option>
+                      <option value="기타">기타</option>
                     </select>
                   </div>
                 </div>
@@ -105,9 +107,11 @@ export default function ContactForm() {
                   <select required value={form.scale} onChange={set("scale")}
                     className="w-full rounded-xl border border-neutral-200 bg-white px-4 py-3.5 text-[15px] outline-none transition-all duration-200 focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C]">
                     <option value="">선택해주세요</option>
+                    <option value="아직 없음">아직 없음</option>
                     <option value="~30명">~30명</option>
                     <option value="30~80명">30~80명</option>
-                    <option value="80명~">80명~</option>
+                    <option value="80~200명">80~200명</option>
+                    <option value="200명~">200명~</option>
                   </select>
                 </div>
 

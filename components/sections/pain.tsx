@@ -53,7 +53,7 @@ export default function Pain() {
             지금 이 중에 몇 개나 해당되세요?
           </h2>
           <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
-            오프라인 학원 원장도, 온라인 교육 사업자도 — 문제의 뿌리는 같습니다. 자동화 시스템의 부재.
+            학원도, 온라인 강사도, 프랜차이즈도 — 문제의 뿌리는 같습니다. 자동화 시스템의 부재.
           </p>
         </AnimatedSection>
 

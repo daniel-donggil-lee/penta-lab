@@ -32,7 +32,7 @@ export default function Services() {
             직접 운영하며 검증한 솔루션
           </h2>
           <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
-            아래 솔루션은 모두 실제 학원에서 3년간 운영하며 검증한 것입니다. 상담을 통해 가장 필요한 것부터 맞춤 제안드립니다.
+            아래는 실제 학원에서 3년간 운영하며 검증한 핵심 솔루션입니다. 상담을 통해 가장 필요한 것부터 맞춤 제안드립니다.
           </p>
         </AnimatedSection>
 

@@ -45,7 +45,7 @@ export default function FoundingPartner() {
             지금 신청하면 이 조건으로 시작합니다
           </h2>
           <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-white/50">
-            오프라인 학원 원장도, 온라인 교육 사업자도 동일 조건으로 신청 가능합니다.
+            학원·온라인 강의·프랜차이즈·크리에이터 모두 동일 조건으로 신청 가능합니다.
           </p>
         </AnimatedSection>
 

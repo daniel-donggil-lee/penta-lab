@@ -67,7 +67,7 @@ export default function Hero() {
         <div className="flex-1">
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-9" style={seq(100)}>
-            {["오프라인 학원 원장", "온라인 교육 사업자"].map((t, i) => (
+            {["오프라인 학원", "온라인 교육 사업자", "프랜차이즈", "크리에이터"].map((t, i) => (
               <span
                 key={t}
                 className="inline-flex items-center gap-1.5 rounded-full border border-[#C9A84C]/30 bg-[#C9A84C]/12 px-3.5 py-1.5 text-[12px] font-semibold text-[#C9A84C] before:content-['✓']"
@@ -95,7 +95,7 @@ export default function Hero() {
 
           {/* Sub */}
           <p className="mb-12 max-w-[600px] text-[clamp(16px,2.2vw,20px)] leading-[1.7] text-white/60" style={seq(900)}>
-            오프라인 학원부터 팔로워 10만 온라인 강사까지 — 직접 운영하며 검증한 자동화 시스템을 이식합니다
+            학원·온라인 강의·프랜차이즈·크리에이터 — 직접 운영하며 검증한 자동화 시스템을 이식합니다
           </p>
 
           {/* CTAs */}
@@ -117,12 +117,12 @@ export default function Hero() {
           {/* Badges with count-up */}
           <div className="flex flex-wrap gap-8" style={seq(1300)}>
             <CountBadge end={3} suffix="년" label="직접 운영·검증" delay={1500} />
-            <CountBadge end={15} suffix="개" label="검증된 솔루션" delay={1700} />
+            <CountBadge end={7} suffix="개" label="검증된 솔루션" delay={1700} />
             <div className="flex flex-col gap-0.5">
               <span className="text-[clamp(24px,3vw,32px)] font-black leading-none tracking-[-0.03em] text-[#C9A84C]">
-                1/10
+                직접
               </span>
-              <span className="text-[12px] text-white/45">외주 대비 비용</span>
+              <span className="text-[12px] text-white/45">외주 없이 구축</span>
             </div>
             <CountBadge end={8} suffix="주" label="구축 완료" delay={1900} />
           </div>
