@@ -126,22 +126,6 @@ export default function Hero() {
         <DashboardMockup />
       </div>
 
-      {/* Bottom trust bar */}
-      <div className="relative mx-auto mt-16 max-w-[1100px]" style={seq(1800)}>
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8" />
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-[13px] text-white/30">
-          <span>카카오 알림톡 연동</span>
-          <span className="text-white/10">·</span>
-          <span>Google Workspace 자동화</span>
-          <span className="text-white/10">·</span>
-          <span>Solapi 메시징</span>
-          <span className="text-white/10">·</span>
-          <span>Vercel 호스팅</span>
-          <span className="text-white/10">·</span>
-          <span>Supabase 데이터</span>
-        </div>
-      </div>
-
       {/* Scroll indicator */}
       <div className="relative flex justify-center mt-10" style={seq(2200)}>
         <div className="flex flex-col items-center gap-2">

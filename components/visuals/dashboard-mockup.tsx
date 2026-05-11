@@ -59,67 +59,147 @@ function MetricCard({ label, values, color, delay, suffix = "" }: {
 }
 
 const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
+const BAR_H = 56; // px, chart height for SVG
 
 function LiveBarChart({ delay }: { delay: number }) {
   const [show, setShow] = useState(false);
   const [bars, setBars] = useState([65, 45, 80, 55, 90, 70, 85]);
+  const [flashed, setFlashed] = useState<number | null>(null);
+  const [count, setCount] = useState(28);
+  const [tick, setTick] = useState(0); // forces SVG path re-render key
 
   useEffect(() => {
     const t = setTimeout(() => setShow(true), delay);
     return () => clearTimeout(t);
   }, [delay]);
 
+  // Fast bar updates every 900ms — one random bar changes at a time
   useEffect(() => {
     if (!show) return;
     const t = setInterval(() => {
-      setBars((prev) => prev.map((v) => {
-        const delta = Math.floor(Math.random() * 20) - 10;
-        return Math.max(25, Math.min(95, v + delta));
-      }));
-    }, 2500);
+      const idx = Math.floor(Math.random() * 7);
+      setBars((prev) => {
+        const next = [...prev];
+        const delta = Math.floor(Math.random() * 28) - 10;
+        next[idx] = Math.max(22, Math.min(95, next[idx] + delta));
+        return next;
+      });
+      setFlashed(idx);
+      setTick((v) => v + 1);
+      setTimeout(() => setFlashed(null), 350);
+    }, 900);
+    return () => clearInterval(t);
+  }, [show]);
+
+  // Count ticks up every ~4s
+  useEffect(() => {
+    if (!show) return;
+    const t = setInterval(() => setCount((c) => c + 1), 4200);
     return () => clearInterval(t);
   }, [show]);
 
   const avg = Math.round(bars.reduce((a, b) => a + b, 0) / bars.length);
-  const maxBar = Math.max(...bars);
+  const maxIdx = bars.indexOf(Math.max(...bars));
+
+  // SVG polyline points — connect bar tops
+  // Each bar slot = 100/7 % wide; center at slot midpoint
+  const W = 100; // viewBox width units
+  const slotW = W / 7;
+  const points = bars
+    .map((h, i) => `${(i + 0.5) * slotW},${BAR_H - (h / 100) * BAR_H}`)
+    .join(" ");
 
   return (
     <div>
-      <div className="relative flex items-end gap-1 h-[52px]">
+      <div className="mb-1 flex items-center justify-between">
+        <span className="text-[7px] text-white/20">오늘 총</span>
+        <span
+          className="text-[9px] font-bold text-[#C9A84C]"
+          style={{ transition: "all 300ms" }}
+        >
+          {count}건
+        </span>
+      </div>
+
+      {/* Chart area — bars + SVG sparkline overlay */}
+      <div className="relative" style={{ height: BAR_H }}>
         {/* Average dashed line */}
         <div
-          className="pointer-events-none absolute left-0 right-0 border-t border-dashed border-[#C9A84C]/30"
-          style={{ bottom: `${avg}%`, transition: "bottom 800ms ease" }}
+          className="pointer-events-none absolute left-0 right-0 border-t border-dashed border-white/10"
+          style={{ top: `${100 - avg}%`, transition: "top 700ms ease" }}
         >
-          <span className="absolute right-0 -top-3 text-[7px] text-[#C9A84C]/60">avg</span>
+          <span className="absolute right-0 -top-3 text-[6px] text-white/20">avg</span>
         </div>
 
-        {bars.map((h, i) => (
-          <div key={i} className="relative flex flex-1 flex-col items-center">
-            {/* Value label on tallest bar */}
-            {h === maxBar && show && (
-              <span className="absolute -top-3.5 text-[7px] font-bold text-[#C9A84C]">{h}</span>
-            )}
-            <div
-              className="w-full rounded-t-sm"
-              style={{
-                height: show ? `${h}%` : "0%",
-                background: i === 4
-                  ? "linear-gradient(to top, #C9A84C, #e8c96d)"
-                  : i === bars.indexOf(maxBar)
-                  ? "#C9A84C"
-                  : "rgba(255,255,255,0.12)",
-                transition: `height 800ms cubic-bezier(0.16,1,0.3,1) ${show ? 0 : i * 80}ms`,
-                boxShadow: i === 4 ? "0 0 8px rgba(201,168,76,0.4)" : "none",
-              }}
+        {/* Bars */}
+        <div className="absolute inset-0 flex items-end gap-1">
+          {bars.map((h, i) => (
+            <div key={i} className="relative flex flex-1 flex-col items-center justify-end" style={{ height: "100%" }}>
+              <div
+                className="w-full rounded-t-sm"
+                style={{
+                  height: show ? `${h}%` : "0%",
+                  background:
+                    i === maxIdx
+                      ? "linear-gradient(to top, #C9A84C, #e8c96d)"
+                      : flashed === i
+                      ? "rgba(201,168,76,0.55)"
+                      : "rgba(255,255,255,0.11)",
+                  transition: "height 500ms cubic-bezier(0.16,1,0.3,1), background 300ms",
+                  boxShadow: i === maxIdx ? "0 0 10px rgba(201,168,76,0.5)" : "none",
+                }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* SVG sparkline overlay */}
+        {show && (
+          <svg
+            key={tick}
+            viewBox={`0 0 ${W} ${BAR_H}`}
+            preserveAspectRatio="none"
+            className="pointer-events-none absolute inset-0 h-full w-full"
+          >
+            <defs>
+              <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#C9A84C" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="#C9A84C" stopOpacity="0.8" />
+              </linearGradient>
+            </defs>
+            <polyline
+              points={points}
+              fill="none"
+              stroke="url(#lineGrad)"
+              strokeWidth="1.2"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              strokeDasharray="200"
+              strokeDashoffset="200"
+              style={{ animation: "drawLine 600ms cubic-bezier(0.16,1,0.3,1) forwards" }}
             />
-          </div>
-        ))}
+            {/* Dot on highest bar */}
+            <circle
+              cx={(maxIdx + 0.5) * slotW}
+              cy={BAR_H - (bars[maxIdx] / 100) * BAR_H}
+              r="2"
+              fill="#C9A84C"
+              style={{ animation: "glowPulse 1.5s ease-in-out infinite" }}
+            />
+          </svg>
+        )}
       </div>
+
       {/* Day labels */}
       <div className="mt-1 flex gap-1">
-        {DAYS.map((d) => (
-          <div key={d} className="flex-1 text-center text-[7px] text-white/20">{d}</div>
+        {DAYS.map((d, i) => (
+          <div
+            key={d}
+            className="flex-1 text-center text-[7px] transition-colors duration-300"
+            style={{ color: i === maxIdx ? "#C9A84C" : "rgba(255,255,255,0.18)" }}
+          >
+            {d}
+          </div>
         ))}
       </div>
     </div>
