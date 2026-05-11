@@ -133,6 +133,7 @@ export default function SurveyPage() {
   const [maintBudget, setMaintBudget] = useState("");
   const [startTiming, setStartTiming] = useState("");
   const [memo, setMemo] = useState("");
+  const [sectionNotes, setSectionNotes] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
 
   const isB = bizType === "online" || bizType === "creator";
@@ -178,6 +179,7 @@ export default function SurveyPage() {
         ts, bizLabel, org, name, phone, email,
         scale, instructors ? `${instructors}명` : "0명", staff ? `${staff}명` : "0명", duration,
         toolsStr, painsStr, buildBudget, maintBudget, startTiming, memo,
+        Object.entries(sectionNotes).filter(([,v]) => v).map(([k,v]) => `[${k}] ${v}`).join(" / "),
       ],
     });
     try {
@@ -215,7 +217,7 @@ export default function SurveyPage() {
         <div className="mb-10 text-center">
           <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">PENTA LAB</p>
           <h1 className="text-[26px] font-black tracking-[-0.03em] text-[#0a0a0a] sm:text-[32px]">교육 사업 진단 설문</h1>
-          <p className="mt-2 text-[14px] text-neutral-400">3분이면 충분합니다. 현재 운영 현황을 알려주세요.</p>
+          <p className="mt-2 text-[14px] text-neutral-400">답변해주신 내용을 바탕으로 맞춤형 설문을 보내드릴 예정이니 이번 설문의 답변은 정확하지 않아도 괜찮습니다.</p>
         </div>
 
         <div className="flex flex-col gap-8">
@@ -239,6 +241,11 @@ export default function SurveyPage() {
                   <div className="mt-1 text-[11px] text-neutral-400">{t.desc}</div>
                 </button>
               ))}
+            </div>
+            <div className="mt-5">
+              <textarea value={sectionNotes["sec1"] || ""} onChange={(e) => setSectionNotes((n) => ({ ...n, sec1: e.target.value }))} rows={2}
+                placeholder="관련하여 더 알려주실 부분이 있다면 편히 작성해주세요. 어떤 어려움이든 괜찮습니다."
+                className={`${inputClass} resize-none text-[13px]`} />
             </div>
           </section>
 
@@ -265,6 +272,11 @@ export default function SurveyPage() {
                 <label className="mb-1.5 block text-[12px] font-bold text-neutral-500">이메일 <span className="text-neutral-300">선택</span></label>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="example@email.com" className={inputClass} />
               </div>
+            </div>
+            <div className="mt-5">
+              <textarea value={sectionNotes["sec2"] || ""} onChange={(e) => setSectionNotes((n) => ({ ...n, sec2: e.target.value }))} rows={2}
+                placeholder="관련하여 더 알려주실 부분이 있다면 편히 작성해주세요. 어떤 어려움이든 괜찮습니다."
+                className={`${inputClass} resize-none text-[13px]`} />
             </div>
           </section>
 
@@ -332,6 +344,11 @@ export default function SurveyPage() {
                   </div>
                 )}
               </div>
+              <div className="mt-4">
+                <textarea value={sectionNotes["sec3"] || ""} onChange={(e) => setSectionNotes((n) => ({ ...n, sec3: e.target.value }))} rows={2}
+                  placeholder="관련하여 더 알려주실 부분이 있다면 편히 작성해주세요. 어떤 어려움이든 괜찮습니다."
+                  className={`${inputClass} resize-none text-[13px]`} />
+              </div>
             </div>
           </section>
 
@@ -339,7 +356,7 @@ export default function SurveyPage() {
           <section className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
             <div className="mb-5 flex items-center gap-3">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C9A84C] text-[12px] font-black text-white">4</span>
-              <h2 className="text-[16px] font-extrabold text-[#0a0a0a]">지금 가장 아픈 문제는? <span className="text-[13px] font-normal text-neutral-400">해당 항목 모두 선택</span></h2>
+              <h2 className="text-[16px] font-extrabold text-[#0a0a0a]">현재 운영상의 가장 큰 어려움은 어떤 부분인가요? <span className="text-[13px] font-normal text-neutral-400">해당 항목 모두 선택</span></h2>
             </div>
             {bizType ? (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -380,6 +397,11 @@ export default function SurveyPage() {
                 위에서 사업 유형을 먼저 선택해주세요
               </div>
             )}
+            <div className="mt-5">
+              <textarea value={sectionNotes["sec4"] || ""} onChange={(e) => setSectionNotes((n) => ({ ...n, sec4: e.target.value }))} rows={2}
+                placeholder="관련하여 더 알려주실 부분이 있다면 편히 작성해주세요. 어떤 어려움이든 괜찮습니다."
+                className={`${inputClass} resize-none text-[13px]`} />
+            </div>
           </section>
 
           {/* ─── 5. 예산 & 시점 ─── */}
@@ -416,7 +438,7 @@ export default function SurveyPage() {
               <div>
                 <label className="mb-1.5 block text-[13px] font-bold text-neutral-600">추가 요청사항 <span className="font-normal text-neutral-400">선택</span></label>
                 <textarea value={memo} onChange={(e) => setMemo(e.target.value)} rows={3}
-                  placeholder="현재 쓰는 시스템, 원하는 기능, 레퍼런스 사이트 등 자유롭게"
+                  placeholder="관련하여 더 알려주실 부분이 있다면 편히 작성해주세요. 어떤 어려움이든 괜찮습니다."
                   className={`${inputClass} resize-none`} />
               </div>
             </div>
