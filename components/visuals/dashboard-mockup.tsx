@@ -191,7 +191,7 @@ export default function DashboardMockup() {
   }, [handleMouseMove]);
 
   return (
-    <div className="relative w-[440px] shrink-0 max-lg:hidden">
+    <div className="relative w-[520px] shrink-0 max-lg:hidden">
       {/* Glow behind */}
       <div className="absolute -inset-8 rounded-3xl bg-[#C9A84C]/6 blur-[40px] glow-pulse" />
 
