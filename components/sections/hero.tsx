@@ -118,7 +118,7 @@ export default function Hero() {
           <div className="flex flex-wrap gap-8" style={seq(1300)}>
             <CountBadge end={3} suffix="년" label="직접 운영·검증" delay={1500} />
             <CountBadge end={7} suffix="개" label="검증된 솔루션" delay={1700} />
-            <CountBadge end={150} suffix="+" label="운영 중 원생 수" delay={1900} />
+            <CountBadge end={100} suffix="%" label="자체 시스템 운영" delay={1900} />
           </div>
         </div>
 
