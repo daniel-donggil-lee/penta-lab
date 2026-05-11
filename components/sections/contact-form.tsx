@@ -60,19 +60,19 @@ export default function ContactForm() {
 
   return (
     <section id="contact" className="bg-neutral-50 px-10 py-[100px]">
-      <div className="mx-auto max-w-[900px]">
+      <div className="mx-auto max-w-[900px] text-center">
         <AnimatedSection>
           <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">무료 상담 신청</p>
           <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">
             지금 신청하면 24시간 내 연락드립니다
           </h2>
-          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
+          <p className="mx-auto mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
             부담 없이 작성해주세요. 가장 아픈 문제 하나만 적어도 됩니다.
           </p>
         </AnimatedSection>
 
         <AnimatedSection animation="fade-up" delay={200}>
-          <div className="max-w-[680px] rounded-3xl border border-neutral-200 bg-white p-14 max-sm:p-8 transition-shadow duration-300 hover:shadow-xl">
+          <div className="mx-auto max-w-[680px] rounded-3xl border border-neutral-200 bg-white p-14 max-sm:p-8 transition-shadow duration-300 hover:shadow-xl">
             {submitted ? (
               <div className="py-10 text-center">
                 <SuccessCheck />
