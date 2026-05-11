@@ -159,3 +159,68 @@
 .survey-slide-left  { animation: surveySlideLeft  0.28s cubic-bezier(0.2, 0, 0.2, 1) both; }
 .pop-in             { animation: popIn      0.22s ease-out both; }
 .rank-badge-in      { animation: rankBadge  0.26s ease-out both; }
+
+/* ── Landing page animations ───────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes gradientMove {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25%      { transform: translate(30px, -20px) scale(1.05); }
+  50%      { transform: translate(-20px, 15px) scale(0.97); }
+  75%      { transform: translate(15px, 25px) scale(1.03); }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.12; }
+  50%      { opacity: 0.22; }
+}
+@keyframes drawLine {
+  from { stroke-dashoffset: 100%; }
+  to   { stroke-dashoffset: 0%; }
+}
+@keyframes barGrow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+@keyframes countFlash {
+  0%   { color: #C9A84C; text-shadow: 0 0 16px rgba(201,168,76,0.5); }
+  100% { color: #C9A84C; text-shadow: none; }
+}
+@keyframes widthGrow {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(1deg); }
+}
+@keyframes urgentPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(248,113,113,0.4); }
+  50%      { box-shadow: 0 0 12px 4px rgba(248,113,113,0.15); }
+}
+
+.shimmer-gold {
+  background: linear-gradient(110deg, #C9A84C 30%, #e8c96d 50%, #C9A84C 70%);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.glow-pulse   { animation: glowPulse 4s ease-in-out infinite; }
+.float-gentle { animation: float 6s ease-in-out infinite; }
+.urgent-pulse { animation: urgentPulse 2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-gold,
+  .glow-pulse,
+  .float-gentle,
+  .urgent-pulse {
+    animation: none;
+  }
+}

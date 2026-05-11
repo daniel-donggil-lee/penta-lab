@@ -1,5 +1,6 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AnimatedSection from "@/components/ui/animated-section";
 
 const TRACK_A = [
   { n: "01", text: "카톡 문의 늦게 답하면 그냥 이탈" },
@@ -23,19 +24,20 @@ function PainGrid({ items }: { items: typeof TRACK_A }) {
   return (
     <>
       <div className="mb-10 grid grid-cols-3 gap-4 max-sm:grid-cols-2 max-[480px]:grid-cols-1">
-        {items.map(({ n, text }) => (
-          <div
-            key={n}
-            className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 p-7 transition hover:-translate-y-0.5 hover:border-[#C9A84C] before:absolute before:left-0 before:right-0 before:top-0 before:h-[3px] before:bg-[#C9A84C] before:opacity-0 before:transition hover:before:opacity-100"
-          >
-            <div className="mb-3 text-[11px] font-bold tracking-[0.08em] text-neutral-400">{n}</div>
-            <div className="text-[15px] font-bold leading-snug text-[#0a0a0a]">{text}</div>
-          </div>
+        {items.map(({ n, text }, i) => (
+          <AnimatedSection key={n} animation="fade-up" delay={i * 80}>
+            <div className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#C9A84C] hover:shadow-lg hover:shadow-[#C9A84C]/5 before:absolute before:left-0 before:right-0 before:top-0 before:h-[3px] before:bg-[#C9A84C] before:opacity-0 before:transition hover:before:opacity-100">
+              <div className="mb-3 text-[11px] font-bold tracking-[0.08em] text-neutral-400">{n}</div>
+              <div className="text-[15px] font-bold leading-snug text-[#0a0a0a]">{text}</div>
+            </div>
+          </AnimatedSection>
         ))}
       </div>
-      <div className="flex items-center justify-between rounded-xl bg-[#0a0a0a] px-7 py-5 text-[16px] font-bold text-white">
-        이 중 <span className="text-[#C9A84C]">&nbsp;1개라도&nbsp;</span> 해당되면, 펜타랩이 해결합니다 →
-      </div>
+      <AnimatedSection animation="fade-up" delay={500}>
+        <div className="flex items-center justify-between rounded-xl bg-[#0a0a0a] px-7 py-5 text-[16px] font-bold text-white">
+          이 중 <span className="text-[#C9A84C]">&nbsp;1개라도&nbsp;</span> 해당되면, 펜타랩이 해결합니다 →
+        </div>
+      </AnimatedSection>
     </>
   );
 }
@@ -44,13 +46,15 @@ export default function Pain() {
   return (
     <section id="pain" className="px-10 py-[100px]">
       <div className="mx-auto max-w-[900px]">
-        <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">자가진단</p>
-        <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">
-          지금 이 중에 몇 개나 해당되세요?
-        </h2>
-        <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
-          오프라인 학원 원장도, 온라인 교육 사업자도 — 문제의 뿌리는 같습니다. 자동화 시스템의 부재.
-        </p>
+        <AnimatedSection>
+          <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">자가진단</p>
+          <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">
+            지금 이 중에 몇 개나 해당되세요?
+          </h2>
+          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
+            오프라인 학원 원장도, 온라인 교육 사업자도 — 문제의 뿌리는 같습니다. 자동화 시스템의 부재.
+          </p>
+        </AnimatedSection>
 
         <Tabs defaultValue="a">
           <TabsList className="mb-10 h-auto rounded-xl bg-neutral-100 p-1">

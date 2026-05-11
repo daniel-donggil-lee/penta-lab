@@ -1,5 +1,6 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AnimatedSection from "@/components/ui/animated-section";
 
 const BA_A = [
   { category: "상담 문의", before: "하루 뒤 답장 → 이미 다른 학원 등록", after: "15분 내 자동 응답 → 상담 전환율 3배" },
@@ -16,18 +17,23 @@ const BA_B = [
 function BAGrid({ items }: { items: typeof BA_A }) {
   return (
     <div className="grid grid-cols-3 gap-4 max-md:grid-cols-1">
-      {items.map(({ category, before, after }) => (
-        <div key={category} className="overflow-hidden rounded-2xl border border-neutral-200">
-          <div className="border-b border-neutral-200 bg-red-50 p-5">
-            <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.1em] text-red-400">Before</div>
-            <div className="mb-1.5 text-[12px] font-semibold text-neutral-400">{category}</div>
-            <div className="text-[14px] font-bold leading-snug text-[#0a0a0a]">{before}</div>
+      {items.map(({ category, before, after }, i) => (
+        <AnimatedSection key={category} animation="fade-up" delay={i * 120}>
+          <div className="overflow-hidden rounded-2xl border border-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+            <div className="border-b border-neutral-200 bg-red-50 p-5">
+              <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.1em] text-red-400">Before</div>
+              <div className="mb-1.5 text-[12px] font-semibold text-neutral-400">{category}</div>
+              <div className="text-[14px] font-bold leading-snug text-[#0a0a0a]">{before}</div>
+            </div>
+            <div className="bg-green-50 p-5">
+              <div className="mb-2 flex items-center gap-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-green-500">After</span>
+                <span className="text-green-400" style={{ animation: "bounceDown 2s ease-in-out infinite" }}>↓</span>
+              </div>
+              <div className="text-[14px] font-bold leading-snug text-green-800">{after}</div>
+            </div>
           </div>
-          <div className="bg-green-50 p-5">
-            <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.1em] text-green-500">After</div>
-            <div className="text-[14px] font-bold leading-snug text-green-800">{after}</div>
-          </div>
-        </div>
+        </AnimatedSection>
       ))}
     </div>
   );
@@ -37,13 +43,15 @@ export default function BeforeAfter() {
   return (
     <section id="before-after" className="bg-neutral-50 px-10 py-[100px]">
       <div className="mx-auto max-w-[900px]">
-        <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">Before / After</p>
-        <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">
-          펜타랩 도입 전 vs 후
-        </h2>
-        <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
-          수치로 보이는 변화. 8주 구축 이후 실제 운영 방식이 바뀝니다.
-        </p>
+        <AnimatedSection>
+          <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">Before / After</p>
+          <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">
+            펜타랩 도입 전 vs 후
+          </h2>
+          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">
+            수치로 보이는 변화. 8주 구축 이후 실제 운영 방식이 바뀝니다.
+          </p>
+        </AnimatedSection>
 
         <Tabs defaultValue="a">
           <TabsList className="mb-10 h-auto rounded-xl bg-neutral-200 p-1">

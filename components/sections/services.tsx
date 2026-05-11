@@ -1,6 +1,7 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
+import AnimatedSection from "@/components/ui/animated-section";
 
 interface Tier {
   badge: string; badgeColor: string; tier: string; setup?: string;
@@ -22,29 +23,35 @@ const TIERS_B: Tier[] = [
 function TierGrid({ tiers }: { tiers: Tier[] }) {
   return (
     <div className="mb-10 grid grid-cols-3 gap-4 max-md:grid-cols-1">
-      {tiers.map((t) => (
-        <div
-          key={t.tier}
-          className={`rounded-[20px] border p-8 transition hover:shadow-lg ${t.featured ? "border-[#C9A84C] bg-[#0a0a0a]" : "border-neutral-200 bg-white hover:border-[#C9A84C]"}`}
-        >
-          <span className={`mb-5 inline-block rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] ${t.badgeColor}`}>
-            {t.badge}
-          </span>
-          <div className={`mb-2 text-[22px] font-black tracking-[-0.02em] ${t.featured ? "text-white" : ""}`}>{t.tier}</div>
-          {t.setup && <div className={`mb-1 text-[13px] ${t.featured ? "text-white/40" : "text-neutral-400"}`}>{t.setup}</div>}
-          <div className="mb-5">
-            <span className={`text-[28px] font-black tracking-[-0.03em] ${t.featured ? "text-[#C9A84C]" : ""}`}>{t.price}</span>
-            <span className={`ml-1 text-[14px] ${t.featured ? "text-white/40" : "text-neutral-400"}`}>{t.unit}</span>
+      {tiers.map((t, i) => (
+        <AnimatedSection key={t.tier} animation="fade-up" delay={i * 100}>
+          <div
+            className={`group rounded-[20px] border p-8 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${
+              t.featured
+                ? "border-[#C9A84C] bg-[#0a0a0a] hover:shadow-[#C9A84C]/10"
+                : "border-neutral-200 bg-white hover:border-[#C9A84C] hover:shadow-neutral-200/50"
+            }`}
+            style={t.featured ? { boxShadow: "0 0 24px rgba(201,168,76,0.08)" } : undefined}
+          >
+            <span className={`mb-5 inline-block rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] ${t.badgeColor}`}>
+              {t.badge}
+            </span>
+            <div className={`mb-2 text-[22px] font-black tracking-[-0.02em] ${t.featured ? "text-white" : ""}`}>{t.tier}</div>
+            {t.setup && <div className={`mb-1 text-[13px] ${t.featured ? "text-white/40" : "text-neutral-400"}`}>{t.setup}</div>}
+            <div className="mb-5">
+              <span className={`text-[28px] font-black tracking-[-0.03em] ${t.featured ? "text-[#C9A84C]" : ""}`}>{t.price}</span>
+              <span className={`ml-1 text-[14px] ${t.featured ? "text-white/40" : "text-neutral-400"}`}>{t.unit}</span>
+            </div>
+            <div className={`mb-5 text-[13px] leading-relaxed ${t.featured ? "text-white/55" : "text-neutral-500"}`}>{t.desc}</div>
+            <ul className="flex flex-col gap-2">
+              {t.features.map((f) => (
+                <li key={f} className={`flex items-start gap-2 text-[13px] ${t.featured ? "text-white/65" : "text-neutral-500"}`}>
+                  <span className="mt-[1px] shrink-0 text-[#C9A84C] font-bold">✓</span>{f}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className={`mb-5 text-[13px] leading-relaxed ${t.featured ? "text-white/55" : "text-neutral-500"}`}>{t.desc}</div>
-          <ul className="flex flex-col gap-2">
-            {t.features.map((f) => (
-              <li key={f} className={`flex items-start gap-2 text-[13px] ${t.featured ? "text-white/65" : "text-neutral-500"}`}>
-                <span className="mt-[1px] shrink-0 text-[#C9A84C] font-bold">✓</span>{f}
-              </li>
-            ))}
-          </ul>
-        </div>
+        </AnimatedSection>
       ))}
     </div>
   );
@@ -54,9 +61,11 @@ export default function Services() {
   return (
     <section id="services" className="px-10 py-[100px]">
       <div className="mx-auto max-w-[900px]">
-        <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">서비스 & 가격</p>
-        <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">3단계 서비스 라인</h2>
-        <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">지금 당장 필요한 것부터 시작하세요. 단계별로 확장 가능합니다.</p>
+        <AnimatedSection>
+          <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">서비스 & 가격</p>
+          <h2 className="mb-4 text-[clamp(28px,4vw,44px)] font-black leading-[1.15] tracking-[-0.03em]">3단계 서비스 라인</h2>
+          <p className="mb-14 max-w-[560px] text-[17px] leading-[1.7] text-neutral-500">지금 당장 필요한 것부터 시작하세요. 단계별로 확장 가능합니다.</p>
+        </AnimatedSection>
 
         <Tabs defaultValue="a">
           <TabsList className="mb-10 h-auto rounded-xl bg-neutral-100 p-1">
@@ -67,14 +76,16 @@ export default function Services() {
           <TabsContent value="b"><TierGrid tiers={TIERS_B} /></TabsContent>
         </Tabs>
 
-        <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl bg-[#0a0a0a] px-9 py-8">
-          <p className="text-[15px] leading-relaxed text-white/60">
-            외주 개발 총 시세 <strong className="text-[18px] text-[#C9A84C]">2.3억~5억+</strong> — 펜타랩은 직접 구축합니다. 그 70~80% 절감
-          </p>
-          <Link href="#contact" className="shrink-0 rounded-full bg-[#C9A84C] px-7 py-3 text-[14px] font-bold text-[#0a0a0a] transition hover:bg-[#e8c96d]">
-            가격 상담 →
-          </Link>
-        </div>
+        <AnimatedSection animation="fade-up" delay={300}>
+          <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl bg-[#0a0a0a] px-9 py-8">
+            <p className="text-[15px] leading-relaxed text-white/60">
+              외주 개발 총 시세 <strong className="text-[18px] text-[#C9A84C]">2.3억~5억+</strong> — 펜타랩은 직접 구축합니다. 그 70~80% 절감
+            </p>
+            <Link href="#contact" className="shrink-0 rounded-full bg-[#C9A84C] px-7 py-3 text-[14px] font-bold text-[#0a0a0a] transition-all duration-300 hover:bg-[#e8c96d] hover:shadow-md hover:shadow-[#C9A84C]/20">
+              가격 상담 →
+            </Link>
+          </div>
+        </AnimatedSection>
       </div>
     </section>
   );
