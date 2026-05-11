@@ -58,6 +58,8 @@ function MetricCard({ label, values, color, delay, suffix = "" }: {
   );
 }
 
+const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
+
 function LiveBarChart({ delay }: { delay: number }) {
   const [show, setShow] = useState(false);
   const [bars, setBars] = useState([65, 45, 80, 55, 90, 70, 85]);
@@ -78,19 +80,48 @@ function LiveBarChart({ delay }: { delay: number }) {
     return () => clearInterval(t);
   }, [show]);
 
+  const avg = Math.round(bars.reduce((a, b) => a + b, 0) / bars.length);
+  const maxBar = Math.max(...bars);
+
   return (
-    <div className="flex items-end gap-[3px] h-[48px]">
-      {bars.map((h, i) => (
+    <div>
+      <div className="relative flex items-end gap-1 h-[52px]">
+        {/* Average dashed line */}
         <div
-          key={i}
-          className="w-[6px] rounded-t-sm"
-          style={{
-            height: show ? `${h}%` : "0%",
-            background: i === 4 ? "#C9A84C" : "rgba(255,255,255,0.15)",
-            transition: `height 800ms cubic-bezier(0.16,1,0.3,1) ${show ? 0 : i * 80}ms`,
-          }}
-        />
-      ))}
+          className="pointer-events-none absolute left-0 right-0 border-t border-dashed border-[#C9A84C]/30"
+          style={{ bottom: `${avg}%`, transition: "bottom 800ms ease" }}
+        >
+          <span className="absolute right-0 -top-3 text-[7px] text-[#C9A84C]/60">avg</span>
+        </div>
+
+        {bars.map((h, i) => (
+          <div key={i} className="relative flex flex-1 flex-col items-center">
+            {/* Value label on tallest bar */}
+            {h === maxBar && show && (
+              <span className="absolute -top-3.5 text-[7px] font-bold text-[#C9A84C]">{h}</span>
+            )}
+            <div
+              className="w-full rounded-t-sm"
+              style={{
+                height: show ? `${h}%` : "0%",
+                background: i === 4
+                  ? "linear-gradient(to top, #C9A84C, #e8c96d)"
+                  : i === bars.indexOf(maxBar)
+                  ? "#C9A84C"
+                  : "rgba(255,255,255,0.12)",
+                transition: `height 800ms cubic-bezier(0.16,1,0.3,1) ${show ? 0 : i * 80}ms`,
+                boxShadow: i === 4 ? "0 0 8px rgba(201,168,76,0.4)" : "none",
+              }}
+            />
+          </div>
+        ))}
+      </div>
+      {/* Day labels */}
+      <div className="mt-1 flex gap-1">
+        {DAYS.map((d) => (
+          <div key={d} className="flex-1 text-center text-[7px] text-white/20">{d}</div>
+        ))}
+      </div>
     </div>
   );
 }
