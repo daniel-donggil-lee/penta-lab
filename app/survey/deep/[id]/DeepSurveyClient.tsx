@@ -31,7 +31,6 @@ const SECTIONS = [
   { key: "E", title: "채널 데이터 추적", desc: "마케팅 채널 현황" },
   { key: "F", title: "의사결정 지표", desc: "이거 알면 결정이 달라진다" },
   { key: "G", title: "변화 수용도", desc: "새 시스템 도입 준비도" },
-  { key: "H", title: "펜타 관계 맥락", desc: "함께 만들 시스템을 위한 공동 검토", pentaOnly: true },
   { key: "M", title: "미팅 의향", desc: "다음 단계 안내" },
 ];
 
@@ -44,8 +43,7 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
   const [answers, setAnswers] = useState<Answers>({});
   const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
 
-  const isPenta = respondent?.isPentaPartner ?? false;
-  const visibleSections = SECTIONS.filter((s) => !s.pentaOnly || isPenta);
+  const visibleSections = SECTIONS;
 
   // localStorage auto-save
   const storageKey = `deep-survey-${params.id}`;
@@ -122,9 +120,7 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
           <h1 className="mb-2 text-[24px] font-black text-[#0a0a0a]">제출 완료</h1>
           <p className="mb-4 text-[14px] text-neutral-500">
             {respondent.name}님, 소중한 응답 감사합니다.<br />
-            {isPenta
-              ? "응답 기반으로 함께 설계할 시스템 초안을 준비하겠습니다."
-              : "응답 기반 1:1 무료 진단 미팅을 준비해 연락드리겠습니다."}
+            응답 기반 1:1 무료 진단 미팅을 준비해 연락드리겠습니다.
           </p>
           <p className="text-[13px] text-neutral-400">빠른 시일 내에 연락드리겠습니다.</p>
         </div>
@@ -191,7 +187,6 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
       case "E": return renderE();
       case "F": return renderF();
       case "G": return renderG();
-      case "H": return renderH();
       case "M": return renderM();
       default: return null;
     }
@@ -486,56 +481,11 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
     );
   }
 
-  function renderH() {
-    return (
-      <div className="flex flex-col gap-6">
-        <div className="rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/20 px-4 py-3">
-          <div className="text-[12px] font-bold text-[#C9A84C] mb-1">펜타 파트너 전용 섹션</div>
-          <div className="text-[12px] text-neutral-600">
-            이 섹션은 펜타와 함께 만들어갈 시스템을 설계하기 위한 공동 검토입니다.<br />
-            부담 없이 현재 생각을 편하게 적어주세요.
-          </div>
-        </div>
-
-        <div>
-          <div className={questionClass}>H1. 펜타 에듀 프리미엄 클래스(논증과추론) 강사 참여 — 현재 의향은?</div>
-          <Scale5 qKey="H1" labels={["낮음", "매우 높음"]} />
-        </div>
-
-        <div>
-          <div className={questionClass}>H2. 펜타 에듀 본점 개강 시, 본인 강의를 어떻게 연결하고 싶으신가요?</div>
-          <TextInput qKey="H2" rows={3} placeholder="자유롭게 적어주세요" />
-        </div>
-
-        <div>
-          <div className={questionClass}>H3. 달콤쌤 인문학 + 더채움 교육연구소 + 펜타 — 머릿속 그림이 있다면?</div>
-          <div className={hintClass}>가장 중요한 질문입니다. 어떤 형태든 편하게 적어주세요.</div>
-          <TextInput qKey="H3" rows={4} placeholder="현재 그리고 계신 큰 그림을 알려주세요" />
-        </div>
-
-        <div>
-          <div className={questionClass}>H4. 펜타북스를 통한 출판(신간/추가) 의향은?</div>
-          <PillSelect qKey="H4" options={["매우 있음", "있음", "검토 가능", "없음"]} />
-        </div>
-
-        <div>
-          <div className={questionClass}>H5. 200명+ 수강생 풀을 펜타 지수(문해력 진단) 시범 측정에 활용해도 괜찮을까요?</div>
-          <PillSelect qKey="H5" options={["적극 좋음", "조건부 가능", "보류", "어려움"]} />
-        </div>
-
-        <div>
-          <div className={questionClass}>H6. 펜타와의 협업에서 가장 중요하게 생각하시는 가치 1가지</div>
-          <TextInput qKey="H6" placeholder="자유롭게 적어주세요" />
-        </div>
-      </div>
-    );
-  }
-
   function renderM() {
     return (
       <div className="flex flex-col gap-6">
         <div>
-          <div className={questionClass}>M1. 응답 기반 1:1 {isPenta ? "시스템 설계 미팅" : "무료 진단 미팅"} 가능 시간대는?</div>
+          <div className={questionClass}>M1. 응답 기반 1:1 무료 진단 미팅 가능 시간대는?</div>
           <MultiSelect qKey="M1" options={["평일 오전", "평일 오후", "평일 저녁", "주말", "협의"]} />
         </div>
 
@@ -564,9 +514,7 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
             {respondent.name}님을 위한 맞춤 진단 설문
           </h1>
           <p className="mt-2 text-[13px] text-neutral-400">
-            {isPenta
-              ? "함께 만들어갈 시스템 설계를 위한 공동 검토입니다. 편하게 답변해주세요."
-              : "응답 기반 1:1 무료 진단 미팅 (60분) + 자동화 ROI 시뮬레이션 보고서를 드립니다."}
+응답 기반 1:1 무료 진단 미팅 (60분) + 자동화 ROI 시뮬레이션 보고서를 드립니다.
           </p>
         </div>
 
