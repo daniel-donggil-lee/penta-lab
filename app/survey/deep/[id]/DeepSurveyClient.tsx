@@ -302,6 +302,11 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
         </div>
 
         <div>
+          <div className={questionClass}>C3-1. 희망 게시 빈도는?</div>
+          <PillSelect qKey="C3_1" options={["주 1회 미만", "주 1~2회", "주 3~5회", "매일", "현재와 동일"]} />
+        </div>
+
+        <div>
           <div className={questionClass}>C4. 게시물 유형 비중은 대략? (체감)</div>
           <div className="grid grid-cols-2 gap-3">
             {["수업안내", "후기", "인사이트·콘텐츠", "일상"].map((t) => (
