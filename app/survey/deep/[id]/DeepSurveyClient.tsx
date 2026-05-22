@@ -118,7 +118,7 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
         <div className="max-w-md text-center">
           <h1 className="mb-2 text-[24px] font-black text-[#0a0a0a]">제출 완료</h1>
           <p className="mb-4 text-[14px] text-neutral-500">
-            {respondent.name}님, 소중한 응답 감사합니다.<br />
+            {respondent.name}대표님, 소중한 응답 감사합니다.<br />
             응답 기반 1:1 무료 진단 미팅을 준비해 연락드리겠습니다.
           </p>
           <p className="text-[13px] text-neutral-400">빠른 시일 내에 연락드리겠습니다.</p>
@@ -355,34 +355,24 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
         <Prefilled label="강의 판매" value={respondent.tools["강의 판매·배포"]?.join(", ") || "-"} />
 
         <div>
-          <div className={questionClass}>D1. 클래스101 vs 자체(계좌이체) 매출 비율은?</div>
-          <PillSelect qKey="D1" options={["클래스101 위주 (80%+)", "클래스101 많음", "반반", "자체 많음", "자체 위주 (80%+)"]} />
+          <div className={questionClass}>D1. 계좌이체를 PG(토스/카카오페이 등)로 바꿀 의향이 있나요?</div>
+          <PillSelect qKey="D1" options={["예", "아니오", "조건부"]} />
+          {a("D1") === "조건부" && <TextInput qKey="D1_detail" placeholder="어떤 조건이라면?" />}
         </div>
 
         <div>
-          <div className={questionClass}>D2. 클래스101 수수료가 부담스러운가요?</div>
-          <Scale5 qKey="D2" labels={["전혀", "매우"]} />
+          <div className={questionClass}>D2. 환불·취소 빈도는 월 평균?</div>
+          <PillSelect qKey="D2" options={["없음", "1~2건", "3~5건", "5건 이상"]} />
         </div>
 
         <div>
-          <div className={questionClass}>D3. 계좌이체를 PG(토스/카카오페이 등)로 바꿀 의향이 있나요?</div>
-          <PillSelect qKey="D3" options={["예", "아니오", "조건부"]} />
-          {a("D3") === "조건부" && <TextInput qKey="D3_detail" placeholder="어떤 조건이라면?" />}
+          <div className={questionClass}>D3. 매출 확인 주기는?</div>
+          <PillSelect qKey="D3" options={["매일", "매주", "매월", "비정기"]} />
         </div>
 
         <div>
-          <div className={questionClass}>D4. 환불·취소 빈도는 월 평균?</div>
-          <PillSelect qKey="D4" options={["없음", "1~2건", "3~5건", "5건 이상"]} />
-        </div>
-
-        <div>
-          <div className={questionClass}>D5. 매출 확인 주기는?</div>
-          <PillSelect qKey="D5" options={["매일", "매주", "매월", "비정기"]} />
-        </div>
-
-        <div>
-          <div className={questionClass}>D6. 세금계산서·현금영수증 발행은 어떻게 하고 계신가요?</div>
-          <TextInput qKey="D6" placeholder="자유롭게 적어주세요 (선택)" rows={2} />
+          <div className={questionClass}>D4. 세금계산서·현금영수증 발행은 어떻게 하고 계신가요?</div>
+          <TextInput qKey="D4" placeholder="자유롭게 적어주세요 (선택)" rows={2} />
         </div>
       </div>
     );
@@ -504,7 +494,7 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
         <div className="mb-8 text-center">
           <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#C9A84C]">PENTA LAB</p>
           <h1 className="text-[22px] font-black tracking-[-0.03em] text-[#0a0a0a] sm:text-[28px]">
-            {respondent.name}님을 위한 맞춤 진단 설문
+            {respondent.name}대표님을 위한 맞춤 진단 설문
           </h1>
           <p className="mt-2 text-[13px] text-neutral-400">
 응답 기반 1:1 무료 진단 미팅 (60분) + 자동화 ROI 시뮬레이션 보고서를 드립니다.
