@@ -263,18 +263,18 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
 
         <div>
           <div className={questionClass}>B5. 수강생이 처음 알게 된 후 등록까지 평균 며칠?</div>
-          <PillSelect qKey="B5" options={["당일", "1주 이내", "1~4주", "1~3개월", "그 이상"]} />
+          <PillSelect qKey="B5" options={["당일", "1주 이내", "1~4주", "1~3개월", "그 이상", "파악되지 않음"]} />
         </div>
 
         <div>
           <div className={questionClass}>B6. 완강률은 체감으로 어느 정도?</div>
           <div className={hintClass}>정확하지 않아도 괜찮습니다.</div>
-          <PillSelect qKey="B6" options={["30% 미만", "30~50%", "50~70%", "70~90%", "90% 이상", "모름"]} />
+          <PillSelect qKey="B6" options={["30% 미만", "30~50%", "50~70%", "70~90%", "90% 이상", "파악되지 않음"]} />
         </div>
 
         <div>
           <div className={questionClass}>B7. 환불·이탈이 주로 발생하는 시점은?</div>
-          <PillSelect qKey="B7" options={["결제 직후", "1~2주차", "중반", "막판", "패턴 없음"]} />
+          <PillSelect qKey="B7" options={["결제 직후", "1~2주차", "중반", "막판", "패턴 없음", "파악되지 않음"]} />
         </div>
       </div>
     );
