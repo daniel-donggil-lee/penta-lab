@@ -393,7 +393,7 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
 
         <div>
           <div className={questionClass}>E3. 네이버카페 회원 수는?</div>
-          <PillSelect qKey="E3" options={["100명 미만", "100~500명", "500~1,000명", "1,000명 이상"]} />
+          <PillSelect qKey="E3" options={["100명 미만", "100~500명", "500~1,000명", "1,000~5,000명", "5,000명 이상"]} />
         </div>
 
         <div>
