@@ -325,8 +325,19 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
         </div>
 
         <div>
+          <div className={questionClass}>C5-1. 콘텐츠 제작 면에서도 자동화 프로그램의 도움을 받을 의사가 있나요?</div>
+          <PillSelect qKey="C5_1" options={["적극적으로 원함", "관심 있음", "잘 모르겠음", "원하지 않음"]} />
+          {(a("C5_1") === "적극적으로 원함" || a("C5_1") === "관심 있음") && <TextInput qKey="C5_1_detail" placeholder="어떤 부분에서 도움받고 싶으신가요? (선택)" rows={2} />}
+        </div>
+
+        <div>
           <div className={questionClass}>C6. 인스타 → 카페·오픈채팅 유입 유도 방식은?</div>
           <MultiSelect qKey="C6" options={["프로필 링크", "게시물 CTA", "DM", "스토리", "별도 안 함"]} />
+        </div>
+
+        <div>
+          <div className={questionClass}>C6-1. 현재의 유입 유도 방식의 한계가 있나요? 변화를 주고 싶다면 어떤 부분인가요?</div>
+          <TextInput qKey="C6_1" placeholder="자유롭게 적어주세요 (선택)" rows={2} />
         </div>
 
         <div>
