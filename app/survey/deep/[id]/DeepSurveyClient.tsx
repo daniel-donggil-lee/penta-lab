@@ -227,8 +227,19 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
         </div>
 
         <div>
+          <div className={questionClass}>A4-1. 강의 외의 업무 시간을 몇 시간 이하로 줄이고 싶으신가요?</div>
+          <PillSelect qKey="A4_1" options={["0시간 (전부 자동화)", "3시간 이하", "5시간 이하", "10시간 이하", "현재 유지"]} />
+        </div>
+
+        <div>
           <div className={questionClass}>A5. &ldquo;이 시간만 줄어도 살겠다&rdquo;는 작업이 있다면?</div>
           <TextInput qKey="A5" placeholder="자유롭게 적어주세요 (선택)" />
+        </div>
+
+        <div>
+          <div className={questionClass}>A6. 자동화된다 해도 스텝을 고용할 의사가 있나요?</div>
+          <PillSelect qKey="A6" options={["예", "아니오", "상황에 따라"]} />
+          {a("A6") === "상황에 따라" && <TextInput qKey="A6_detail" placeholder="어떤 상황이라면?" />}
         </div>
       </div>
     );
