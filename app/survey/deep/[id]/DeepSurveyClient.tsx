@@ -31,7 +31,6 @@ const SECTIONS = [
   { key: "E", title: "채널 데이터 추적", desc: "마케팅 채널 현황" },
   { key: "F", title: "의사결정 지표", desc: "이거 알면 결정이 달라진다" },
   { key: "G", title: "변화 수용도", desc: "새 시스템 도입 준비도" },
-  { key: "M", title: "미팅 의향", desc: "다음 단계 안내" },
 ];
 
 type Answers = Record<string, string | string[]>;
@@ -187,7 +186,6 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
       case "E": return renderE();
       case "F": return renderF();
       case "G": return renderG();
-      case "M": return renderM();
       default: return null;
     }
   }
@@ -476,27 +474,6 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
         <div>
           <div className={questionClass}>G6. 한 번에 도입 가능한 신규 시스템 개수는?</div>
           <PillSelect qKey="G6" options={["1개", "2~3개", "5개 이상", "모르겠음"]} />
-        </div>
-      </div>
-    );
-  }
-
-  function renderM() {
-    return (
-      <div className="flex flex-col gap-6">
-        <div>
-          <div className={questionClass}>M1. 응답 기반 1:1 무료 진단 미팅 가능 시간대는?</div>
-          <MultiSelect qKey="M1" options={["평일 오전", "평일 오후", "평일 저녁", "주말", "협의"]} />
-        </div>
-
-        <div>
-          <div className={questionClass}>M2. 선호하시는 미팅 형식은?</div>
-          <PillSelect qKey="M2" options={["Zoom", "대면", "전화", "무관"]} />
-        </div>
-
-        <div>
-          <div className={questionClass}>M3. 추가로 전달하고 싶은 내용이 있다면</div>
-          <TextInput qKey="M3" rows={3} placeholder="자유롭게 적어주세요 (선택)" />
         </div>
       </div>
     );
