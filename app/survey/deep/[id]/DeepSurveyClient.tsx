@@ -253,7 +253,7 @@ export default function DeepSurveyPage({ params }: { params: { id: string } }) {
 
         <div>
           <div className={questionClass}>B3. 한 기수당 평균 인원은?</div>
-          <PillSelect qKey="B3" options={["10명 미만", "10~30명", "30~50명", "50명 이상", "상시모집"]} />
+          <PillSelect qKey="B3" options={["10명 미만", "10~30명", "30~50명", "50~100명", "100~300명", "300명 이상", "상시모집"]} />
         </div>
 
         <div>
